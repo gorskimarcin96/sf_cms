@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/fonts/Fira+Sans.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="website">
+        {{ include('website/header.html.twig') }}
+        {{ include('website/alerts.html.twig') }}
+        <main class="container p-0">
+            {% block content %}{% endblock %}
+        </main>
+        {{ include('website/footer.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/scroll.js') }}"></script>
+    <script src="{{ asset('js/scrollup.js') }}"></script>
+    <script src="{{ asset('js/timer.js') }}"></script>
+    <script src="{{ asset('js/title.js') }}"></script>
+{% endblock %}

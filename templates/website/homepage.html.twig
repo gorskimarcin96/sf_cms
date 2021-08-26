@@ -1,0 +1,86 @@
+{% extends 'website/base.html.twig' %}
+
+{% block content %}
+    <h1 class="bg-black m-0 text-center py-2">{{ 'homepage'|trans|upper }}</h1>
+    <div id="carousel" class="carousel slide" data-ride="carousel">
+        <ul class="carousel-indicators">
+            {% for slider in sliders %}
+                <li data-target="carousel" data-slide-to="{{ slider.id }}" class="{{ loop.first?'active' }}"></li>
+            {% endfor %}
+        </ul>
+        <div class="carousel-inner">
+            <div class="carousel-inner">
+                {% for slider in sliders %}
+                    <div class="carousel-item {{ loop.first?'active' }}">
+                        <img src="{{ asset(slider.fullFileFn) }}" class="d-block w-100" alt="{{ slider.title }}">
+                        <div class="carousel-caption">{{ slider.title }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+            <div>
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </div>
+        </a>
+        <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+            <div>
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="homepage p-5">
+        {% set i = 0 %}
+        {% for article in articles %}
+            <article class="article p-2 my-4 row {{ i%2 == 0 ? 'slide-left' : 'slide-right' }}" id="article_{{ i }}">
+                <div class="col-md-9">
+                    <h2>{{ article.title }}</h2>
+                    <div class="text-shadow">{{ article.description|raw }}</div>
+                </div>
+                <div class="col-md-3">
+                    <img src="{{ asset(article.fullFileFn) }}" alt="{{ article.title }}">
+                </div>
+            </article>
+            {% set i = i + 1 %}
+        {% endfor %}
+        <article class="article p-2 my-4 {{ i%2 == 0 ? 'slide-left' : 'slide-right' }} row" id="article_{{ i }}">
+            <div class="col-md-9">
+                <h2>{{ "Contact"|trans }}</h2>
+                <section class="text-shadow">
+                    <div><b>{{ 'Phone'|trans }}</b>: {{ phone }}</div>
+                    <div><b>Email</b>: <a href="mailto:{{ email }}">{{ email }}</a></div>
+                    <div><b>{{ 'Address'|trans }}</b>: {{ address }}</div>
+                </section>
+            </div>
+            <div class="col-md-3 contact">
+                <a class="btn btn-success ml-auto w-100 d-block" href="{{ url('contact') }}">{{ "Contact"|trans }}</a>
+            </div>
+        </article>
+    </div>
+
+    <section class="py-4 offer" id="offer">
+        <h2 class="text-center">{{ 'Offer'|trans }}</h2>
+        <ul>
+            {% for offer in offers %}
+                <li>{{ offer.title }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="py-4 background-section">
+        <h2 class="text-center mb-4">{{ "Example realization"|trans }}</h2>
+        <div class="row">
+            {% for realization in realizations %}
+                <div class="col-sm-4 mt-3 realization">
+                    <a href="{{ realization.url }}" target="_blank">
+                        <img src="{{ asset(realization.fullFileFn) }}" class="mb-2 mx-auto d-block" alt="{{ realization.title }}">
+                        <span class="text-center d-block font-weight-bolder">{{ realization.title }}</span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

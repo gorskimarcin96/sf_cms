@@ -1,0 +1,14 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        locales: '%app.locales%'
+        email: '%app.email%'
+        phone: '%app.phone%'
+        address: '%app.address%'
+        linkedin: '%app.linkedin%'
+        googleMap: '%app.google_map%'
+        frontendManager: '@App\Utils\FrontendData'
+
+when@test:
+    twig:
+        strict_variables: true
