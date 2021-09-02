@@ -4,11 +4,11 @@ function timer() {
     let time = new Date();
 
     let second = '' + time.getSeconds();
-    second = second.padStart(2, 0);
+    second = second.padStart(2, '0');
     let minute = '' + time.getMinutes();
-    minute = minute.padStart(2, 0);
+    minute = minute.padStart(2, '0');
     let hour = '' + time.getHours();
-    hour = hour.padStart(2, 0);
+    hour = hour.padStart(2, '0');
 
     document.getElementById("clock").innerHTML = hour + ":" + minute + ":" + second;
     if (second === '00' && minute === '00' && hour === '00') {

@@ -2,8 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/fonts/Fira+Sans.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    {{ encore_entry_link_tags('frontend') }}
 {% endblock %}
 
 {% block body %}
@@ -19,8 +18,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/scroll.js') }}"></script>
-    <script src="{{ asset('js/scrollup.js') }}"></script>
-    <script src="{{ asset('js/timer.js') }}"></script>
-    <script src="{{ asset('js/title.js') }}"></script>
+    {{ encore_entry_script_tags('frontend') }}
 {% endblock %}

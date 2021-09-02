@@ -29,7 +29,8 @@
         "friendsofphp/php-cs-fixer": "^3.0",
         "symfony/maker-bundle": "^1.32",
         "symfony/stopwatch": "^5.3",
-        "symfony/web-profiler-bundle": "^5.3"
+        "symfony/web-profiler-bundle": "^5.3",
+        "symfony/webpack-encore-bundle": "^1.12"
     },
     "config": {
         "optimize-autoloader": true,

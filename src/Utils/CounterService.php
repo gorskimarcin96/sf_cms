@@ -65,7 +65,7 @@ class CounterService
                 $dataToCharts[] = [
                     'days' => $day,
                     'refresh' => $this->counterRepository->getRefreshForChart($day),
-                    'entries' => $this->counterRepository->getEntriesForChart($day) . 'sadfsaf' . 'asdfasf',
+                    'entries' => $this->counterRepository->getEntriesForChart($day),
                 ];
             }
 

@@ -4,7 +4,6 @@
             <div class="row">
                 <div class="col-sm-4">
                     <section>
-                        <div class="font-weight-bolder mb-3">{{ 'Contact'|trans }}:</div>
                         <div><b>{{ 'Phone'|trans }}</b>: {{ phone }}</div>
                         <div><b>Email</b>: <a href="mailto:{{ email }}">{{ email }}</a></div>
                         <div><b>{{ 'Address'|trans }}</b>: {{ address }}</div>
@@ -12,12 +11,12 @@
                 </div>
                 <div class="col-sm-4">
                     <section>
-                        <div class="font-weight-bolder">Menu:</div>
-                        {% for route, name in frontendManager.menu %}
-                            <a href="{{ route }}">{{ name }}</a> -
+                        <div class="fw-bolder mb-xl-4 mb-sm-0">Menu:</div>
+                        {% for menu in frontendManager.menu %}
+                            <a href="{{ menu.url }}">{{ menu.name }}</a> -
                         {% endfor %}
                         <a target="_blank" href="https://github.com/gorskimarcin96">github</a> -
-                        <a target="_blank" href="{{ asset("upload/cv.pdf") }}">CV</a>
+                        <a target="_blank" href="{{ asset("upload/CV.pdf") }}">CV</a>
                     </section>
                 </div>
                 <div class="col-sm-4 icons d-flex justify-content-end">

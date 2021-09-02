@@ -4,7 +4,7 @@
             <span class="timer">
                 <span id="dater">{{ "now"|date('d-m-Y') }}</span> | <span id="clock"></span>
             </span>
-            <img src="{{ asset("/img/mgorski.png") }}" class="phone-logo" alt="">
+            <img src="{{ asset("/build/img/mgorski.png") }}" class="phone-logo" alt="mgorski">
         </div>
 
         <div class="col-4 text-right text-background align-self-center">
@@ -17,10 +17,10 @@
     </div>
 </div>
 
-<header class="my-0 col-12">
+<header class="my-0 col-12 main-header">
     <nav class="navbar navbar-expand-sm container text-uppercase navbar-light ">
         <a class="navbar-brand ml-1" href="{{ url('homepage') }}">
-            <img src="{{ asset("/img/mgorski.png") }}" class="align-top mx-auto d-block" alt="">
+            <img src="{{ asset("/build/img/mgorski.png") }}" class="align-top mx-auto d-block" alt="mgorski">
         </a>
 
         <button type="button" data-toggle="collapse" data-target="#navbar"
@@ -30,10 +30,10 @@
 
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav mr-auto">
-                {% for route,name in frontendManager.menu %}
+                {% for menu in frontendManager.menu %}
                     <li class="nav-item mx-2">
-                        <a class="link px-1 {{ app.request.attributes.get('_route') == name ? 'active' : ''}}"
-                           href="{{ route }}">  {{ name|upper }}
+                        <a class="link px-1 {{ menu.active ? 'active' : ''}}"
+                           href="{{ menu.url }}">  {{ menu.name|upper }}
                         </a>
                     </li>
                 {% endfor %}

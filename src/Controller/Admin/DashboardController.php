@@ -122,10 +122,6 @@ class DashboardController extends AbstractDashboardController
 
     public function configureAssets(): Assets
     {
-        return parent::configureAssets()
-            ->addJsFile('js/jquery-3.6.0.min.js')
-            ->addJsFile('js/chart.bundle.js')
-            ->addJsFile('js/chart_counter.js')
-            ->addJsFile('js/cv.js');
+        return parent::configureAssets()->addWebpackEncoreEntry('backend');
     }
 }
