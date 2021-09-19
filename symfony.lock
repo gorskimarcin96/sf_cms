@@ -169,6 +169,9 @@
     "php-cs-fixer/diff": {
         "version": "v2.0.2"
     },
+    "php-webdriver/webdriver": {
+        "version": "1.11.1"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
