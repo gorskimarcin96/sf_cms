@@ -4,6 +4,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       wkhtmltopdf \
       procps \
       nano \
+      git \
       unzip \
       libicu-dev \
       zlib1g-dev \
@@ -13,9 +14,13 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       libpng-dev \
       supervisor \
       cron \
+      sudo \
       libzip-dev \
       libpq-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+      wget \
+      librabbitmq-dev \
+    && pecl install amqp-1.11.0beta \
+    && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
     && docker-php-ext-configure intl \
     && docker-php-ext-install \
       pgsql \
@@ -28,6 +33,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       soap \
       zip \
       gd  \
+    && docker-php-ext-enable amqp \
     && rm -rf /tmp/* \
     && rm -rf /var/list/apt/* \
     && rm -rf /var/lib/apt/lists/* \

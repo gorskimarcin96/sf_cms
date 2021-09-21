@@ -46,6 +46,18 @@ services:
       - "127.0.0.1:81:80"
     networks:
       - app-network
+  rabbitmq:
+    container_name: '${APP_NAME}-rabbitmq'
+    restart: always
+    image: rabbitmq:3.9.5
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${DATABASE_USER}
+      RABBITMQ_DEFAULT_PASS: ${DATABASE_PASSWORD}
+    networks:
+      - app-network
   node:
     image: node:15
     restart: always

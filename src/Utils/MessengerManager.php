@@ -40,22 +40,21 @@ final class MessengerManager
         $this->driver->findElement(WebDriverBy::id(self::IDS['login_submit']))->submit();
     }
 
-    public function sendText(string $url, array|string $text, int $delaySendMessageInSeconds = 0)
+    public function sendTextToUserUrl(array|string $text, string $url, int $delaySendMessageInSeconds = 1)
     {
         $this->driver->get($url);
         $this->waitingLoadMessengerPage();
 
         if (is_string($text)) {
-            $this->driver->findElement(WebDriverBy::cssSelector(self::CSS_SELECTORS['chat_field']))->sendKeys($text);
-            $this->driver->getKeyboard()->pressKey(WebDriverKeys::ENTER);
-        } else {
-            foreach ($text as $textLine) {
-                $this->driver->findElement(WebDriverBy::cssSelector(self::CSS_SELECTORS['chat_field']))->sendKeys($textLine);
-                $this->driver->getKeyboard()->pressKey(WebDriverKeys::ENTER);
-                $this->waitingLoadMessengerPage();
+            $text = [$text];
+        }
 
-                sleep($delaySendMessageInSeconds);
-            }
+        foreach ($text as $textLine) {
+            $this->driver->findElement(WebDriverBy::cssSelector(self::CSS_SELECTORS['chat_field']))->sendKeys($textLine);
+            $this->driver->getKeyboard()->pressKey(WebDriverKeys::ENTER);
+            $this->waitingLoadMessengerPage();
+
+            sleep($delaySendMessageInSeconds);
         }
     }
 
@@ -64,7 +63,8 @@ final class MessengerManager
         $this->driver->wait()->until(
             function () {
                 return count($this->driver->findElements(WebDriverBy::cssSelector(self::CSS_SELECTORS['chat_field'])));
-            }, 'Error locating chat field.'
+            },
+            'Error locating chat field.'
         );
     }
 
