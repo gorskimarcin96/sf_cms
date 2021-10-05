@@ -7,6 +7,7 @@ use App\Entity\Constant;
 use App\Entity\Offer;
 use App\Entity\Realization;
 use App\Entity\Slider;
+use App\Entity\Task;
 use App\Form\CVType;
 use App\Repository\ConstantRepository;
 use App\Utils\CounterService;
@@ -29,7 +30,7 @@ class DashboardController extends AbstractDashboardController
     }
 
     /**
-     * @Route("/admin", methods="GET", name="easyadmin_dashboard")
+     * @Route("/admin", name="easyadmin_dashboard")
      */
     public function index(): Response
     {
@@ -116,6 +117,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud(Offer::class, 'fas fa-newspaper', Offer::class);
         yield MenuItem::linkToCrud(Slider::class, 'fas fa-address-card', Slider::class);
         yield MenuItem::linkToCrud(Realization::class, 'fas fa-image', Realization::class);
+        yield MenuItem::linkToCrud(Task::class, 'fas fa-tasks', Task::class);
         yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'));
         yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'));
     }

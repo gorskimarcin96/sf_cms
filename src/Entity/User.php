@@ -57,7 +57,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\OneToMany(targetEntity="Realization", mappedBy="user")
      */
-    private Collection $realization;
+    private Collection $realizations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="user")
+     */
+    private Collection $tasks;
 
     #[Pure]
     public function __construct()
@@ -65,7 +70,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->articles = new ArrayCollection();
         $this->offers = new ArrayCollection();
         $this->sliders = new ArrayCollection();
-        $this->realization = new ArrayCollection();
+        $this->realizations = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -236,13 +242,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRealizations(): Collection
     {
-        return $this->realization;
+        return $this->realizations;
     }
 
     public function addRealization(Realization $realization): self
     {
-        if (!$this->realization->contains($realization)) {
-            $this->realization[] = $realization;
+        if (!$this->realizations->contains($realization)) {
+            $this->realizations[] = $realization;
             $realization->setUser($this);
         }
 
@@ -251,8 +257,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRealization(Realization $realization): self
     {
-        if ($this->realization->removeElement($realization) && $realization->getUser() === $this) {
+        if ($this->realizations->removeElement($realization) && $realization->getUser() === $this) {
             $realization->setUser(null);
+        }
+
+        return $this;
+    }
+
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTasks(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task) && $task->getUser() === $this) {
+            $task->setUser(null);
         }
 
         return $this;

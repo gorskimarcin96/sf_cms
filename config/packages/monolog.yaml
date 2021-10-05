@@ -1,0 +1,7 @@
+monolog:
+  channels: [ "queue" ]
+  handlers:
+    queue:
+      channels: [ "queue" ]
+      path: "%kernel.logs_dir%/queue.log"
+      type: stream

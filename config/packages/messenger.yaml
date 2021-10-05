@@ -5,4 +5,5 @@ framework:
              failed: 'doctrine://default?queue_name=failed'
 
         routing:
-             'App\Message\SendTextInMessenger': async
+             App\Message\SendTextInMessenger: async
+             App\Message\SaveLog: async

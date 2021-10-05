@@ -35,7 +35,7 @@ class Realization
     private string $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="realization")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="realizations")
      * @ORM\JoinColumn(nullable=false)
      */
     private User $user;
