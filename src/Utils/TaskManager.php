@@ -6,7 +6,6 @@ use App\Entity\Task;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Error;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -17,8 +16,7 @@ class TaskManager
         private TaskRepository         $taskRepository,
         private MessageBusInterface    $bus,
         private EntityManagerInterface $entityManager
-    )
-    {
+    ) {
     }
 
     public function addAvailableTasksToQueue(): int
@@ -46,7 +44,7 @@ class TaskManager
 
             $this->bus->dispatch($message);
         } catch (Error $exception) {
-           $this->addError($task, $exception->getMessage());
+            $this->addError($task, $exception->getMessage());
         }
 
         $task->setIsAdded(true);

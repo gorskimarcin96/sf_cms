@@ -1,11 +1,11 @@
 version: "3.7"
 
 services:
-  app:
+  app-web:
     image: ${APP_NAME}
     build:
       context: ./docker
-    container_name: "${APP_NAME}-app"
+    container_name: "${APP_NAME}-web"
     restart: always
     ports:
       - "127.0.0.1:80:80"
@@ -16,6 +16,24 @@ services:
       - ./docker/config/vhosts:/etc/apache2/sites-enabled
       - ./docker/config/dir/dir.conf:/etc/apache2/mods-enabled/dir.conf
       - ./docker/logs/apache2:/var/log/apache2
+    networks:
+      - app-network
+  app-cron:
+    image: ${APP_NAME}
+    container_name: "${APP_NAME}-cron"
+    restart: always
+    entrypoint: ./docker/sh/cron_run.sh
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - app-network
+  app-messenger-consume:
+    image: ${APP_NAME}
+    container_name: "${APP_NAME}-messenger-consume"
+    restart: always
+    entrypoint: ./docker/sh/messenger_consume.sh
+    volumes:
+      - ./:/var/www/html
     networks:
       - app-network
   postgres:
@@ -72,7 +90,7 @@ services:
     restart: always
     container_name: "${APP_NAME}-selenium-hub"
     depends_on:
-      - app
+      - app-web
     ports:
       - "127.0.0.1:4442:4442"
       - "127.0.0.1:4443:4443"
@@ -86,7 +104,7 @@ services:
     shm_size: 2gb
     depends_on:
       - selenium-hub
-      - app
+      - app-web
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442

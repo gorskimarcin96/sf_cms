@@ -12,6 +12,8 @@ use App\Form\CVType;
 use App\Repository\ConstantRepository;
 use App\Utils\CounterService;
 use App\Utils\PdfManager;
+use Cron\CronBundle\Entity\CronJob;
+use Cron\CronBundle\Entity\CronReport;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -118,6 +120,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud(Slider::class, 'fas fa-address-card', Slider::class);
         yield MenuItem::linkToCrud(Realization::class, 'fas fa-image', Realization::class);
         yield MenuItem::linkToCrud(Task::class, 'fas fa-tasks', Task::class);
+        yield MenuItem::linkToCrud(CronJob::class, 'fa fa-list-alt', CronJob::class);
+        yield MenuItem::linkToCrud(CronReport::class, 'fa fa-scroll', CronReport::class);
         yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'));
         yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'));
     }
