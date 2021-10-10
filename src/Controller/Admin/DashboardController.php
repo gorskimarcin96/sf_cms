@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Constant;
+use App\Entity\MessengerMessages;
 use App\Entity\Offer;
 use App\Entity\Realization;
 use App\Entity\Slider;
@@ -122,6 +123,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud(Task::class, 'fas fa-tasks', Task::class);
         yield MenuItem::linkToCrud(CronJob::class, 'fa fa-list-alt', CronJob::class);
         yield MenuItem::linkToCrud(CronReport::class, 'fa fa-scroll', CronReport::class);
+        yield MenuItem::linkToCrud(MessengerMessages::class, 'fas fa-train', MessengerMessages::class);
         yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'));
         yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'));
     }
