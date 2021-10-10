@@ -6,6 +6,8 @@ parameters:
     app.address: '%env(APP_ADDRESS)%'
     app.linkedin: '%env(APP_LINKEDIN)%'
     app.google_map: '%env(APP_GOOGLE_MAP)%'
+    encryption_manager.method: '%env(ENCRYPTION_MANAGER_METHOD)%'
+    encryption_manager.iv: '%env(ENCRYPTION_MANAGER_IV)%'
 
 services:
     _defaults:
@@ -21,3 +23,11 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+
+
+    entity.listener:
+        class: App\EventListener\EntityListener
+        arguments:
+            - '@App\Utils\Encryption\EncryptionManager'
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }

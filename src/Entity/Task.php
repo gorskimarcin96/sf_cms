@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\TimeStampableTrait;
 use App\Repository\TaskRepository;
+use App\Utils\Encryption\EncryptionManager;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Task
 {
     use TimeStampableTrait;
+
+    private const SECURE_ARGUMENTS = ['password'];
 
     /**
      * @ORM\Id
@@ -53,6 +56,8 @@ class Task
      * @ORM\Column(type="boolean")
      */
     private bool $hasError = false;
+
+    private ?EncryptionManager $encryptionManager = null;
 
     public function getId(): ?int
     {
@@ -95,14 +100,30 @@ class Task
         return $this;
     }
 
-    public function getArguments(): string
+    public function getArguments(bool $decryptArguments = false): string
     {
-        return json_encode($this->arguments);
+        $arguments = $this->arguments;
+
+        if ($decryptArguments){
+            foreach (self::SECURE_ARGUMENTS as $argumentKey) {
+                if (isset($arguments[$argumentKey])){
+                    $arguments[$argumentKey] = $this->encryptionManager->decrypt($arguments[$argumentKey]);
+                }
+            }
+        }
+
+        return json_encode($arguments);
     }
 
     public function setArguments(string $arguments): self
     {
         $this->arguments = json_decode($arguments, true);
+
+        foreach (self::SECURE_ARGUMENTS as $argumentKey) {
+            if (isset($this->arguments[$argumentKey])) {
+                $this->arguments[$argumentKey] = $this->encryptionManager->encrypt($this->arguments[$argumentKey]);
+            }
+        }
 
         return $this;
     }
@@ -127,6 +148,13 @@ class Task
     public function setHasError(bool $hasError): self
     {
         $this->hasError = $hasError;
+
+        return $this;
+    }
+
+    public function setEncryptionManager(EncryptionManager $encryptionManager): self
+    {
+        $this->encryptionManager = $encryptionManager;
 
         return $this;
     }

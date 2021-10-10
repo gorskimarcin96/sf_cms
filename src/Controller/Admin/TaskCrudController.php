@@ -5,11 +5,10 @@ namespace App\Controller\Admin;
 use App\Entity\Task;
 use App\Message\SaveLog;
 use App\Message\SendTextInMessenger;
+use App\Utils\Encryption\EncryptionManager;
 use DateTime;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CodeEditorField;
@@ -17,6 +16,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 
 class TaskCrudController extends AbstractCrudController
 {
+    public function __construct(private EncryptionManager $encryptionManager)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Task::class;
@@ -24,7 +27,10 @@ class TaskCrudController extends AbstractCrudController
 
     public function createEntity(string $entityFqcn): Task
     {
-        return (new Task())->setUser($this->getUser())->setExecutedAt(new DateTime());
+        return (new Task())
+            ->setUser($this->getUser())
+            ->setExecutedAt(new DateTime())
+            ->setEncryptionManager($this->encryptionManager);
     }
 
     public function configureFields(string $pageName): iterable

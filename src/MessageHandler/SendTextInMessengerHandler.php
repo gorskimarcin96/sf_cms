@@ -3,7 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Message\SendTextInMessenger;
-use App\Utils\MessengerManager;
+use App\Utils\Messenger\MessengerManager;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class SendTextInMessengerHandler implements MessageHandlerInterface
@@ -16,6 +16,6 @@ final class SendTextInMessengerHandler implements MessageHandlerInterface
     {
         $this->messengerManager->login($message->getLogin(), $message->getPassword());
         $this->messengerManager->sendTextToUserUrl($message->getText(), $message->getUserUrl());
-        $this->messengerManager->quit();
+        unset($this->messengerManager);
     }
 }

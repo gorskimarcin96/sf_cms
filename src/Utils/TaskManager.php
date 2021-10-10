@@ -39,7 +39,7 @@ class TaskManager
     private function addTaskToQueue(Task $task)
     {
         try {
-            $arguments = json_decode($task->getArguments(), true);
+            $arguments = json_decode($task->getArguments(true), true);
             $message = new ($task->getClass())(...$arguments);
 
             $this->bus->dispatch($message);
