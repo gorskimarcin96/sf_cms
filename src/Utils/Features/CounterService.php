@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils;
+namespace App\Utils\Features;
 
 use App\Entity\Counter;
 use App\Repository\CounterRepository;

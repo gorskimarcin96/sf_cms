@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils;
+namespace App\Utils\Task;
 
 use App\Entity\Task;
 use App\Repository\TaskRepository;

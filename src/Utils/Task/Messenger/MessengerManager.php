@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils\Messenger;
+namespace App\Utils\Task\Messenger;
 
 use ErrorException;
 use Facebook\WebDriver\Exception\WebDriverException;

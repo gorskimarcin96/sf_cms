@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Utils;
+namespace App\Utils\Features\Frontend;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class FrontendData
+class DataManager
 {
     public function __construct(
         private UrlGeneratorInterface $router,
@@ -21,8 +21,8 @@ class FrontendData
 
         foreach (['homepage', 'contact', 'curriculum vitae'] as $navElement) {
             $nav[] = [
-                'url' => $this->router->generate($navElement),
-                'name' => $this->translator->trans($navElement),
+                'url'    => $this->router->generate($navElement),
+                'name'   => $this->translator->trans($navElement),
                 'active' => $activeRoute === $navElement,
             ];
         }

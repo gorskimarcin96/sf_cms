@@ -78,4 +78,9 @@ class CounterRepository extends ServiceEntityRepository
             ->setParameter('dateFrom', $now)
             ->setParameter('dateTo', (clone $now)->modify('-'.$days.' days'));
     }
+
+    public function truncate(): void
+    {
+        $this->createQueryBuilder('c')->delete()->getQuery()->getResult();
+    }
 }

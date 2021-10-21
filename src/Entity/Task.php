@@ -104,9 +104,9 @@ class Task
     {
         $arguments = $this->arguments;
 
-        if ($decryptArguments){
+        if ($decryptArguments) {
             foreach (self::SECURE_ARGUMENTS as $argumentKey) {
-                if (isset($arguments[$argumentKey])){
+                if (isset($arguments[$argumentKey])) {
                     $arguments[$argumentKey] = $this->encryptionManager->decrypt($arguments[$argumentKey]);
                 }
             }

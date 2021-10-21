@@ -43,7 +43,7 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
-      - ./docker/postgres:/var/lib/postgresql/data
+      - postgre:/var/lib/postgresql/data
       - ./docker/logs/postgres:/var/log/postgresql
     environment:
       POSTGRES_DB: ${DATABASE_NAME}
@@ -113,6 +113,10 @@ services:
       - "127.0.0.1:6900:5900"
     networks:
       - app-network
+
+volumes:
+  postgre:
+    driver: local
 
 networks:
   app-network:
