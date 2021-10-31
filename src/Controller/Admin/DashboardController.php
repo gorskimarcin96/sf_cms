@@ -4,7 +4,6 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Constant;
-use App\Entity\Date;
 use App\Entity\MessengerMessages;
 use App\Entity\Offer;
 use App\Entity\Realization;
@@ -12,12 +11,11 @@ use App\Entity\Slider;
 use App\Entity\Task;
 use App\Form\CVType;
 use App\Repository\ConstantRepository;
-use App\Utils\Date\DateManager;
-use App\Utils\Features\Backend\ChartCounter;
 use App\Utils\Features\Backend\PdfManager;
 use App\Utils\Features\Both\Counter\CounterChart;
 use App\Utils\Features\Both\Counter\CounterStatistic;
-use App\Utils\Features\CounterManager;
+use App\Utils\File\FileManager;
+use App\Utils\File\LogReader;
 use Cron\CronBundle\Entity\CronJob;
 use Cron\CronBundle\Entity\CronReport;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -25,6 +23,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -34,7 +33,9 @@ class DashboardController extends AbstractDashboardController
         private CounterStatistic   $counterStatistic,
         private CounterChart       $counterChart,
         private ConstantRepository $constantRepository,
-        private PdfManager         $pdfManager
+        private PdfManager         $pdfManager,
+        private FileManager        $fileManager,
+        private RequestStack       $requestStack
     ) {
     }
 
@@ -47,7 +48,39 @@ class DashboardController extends AbstractDashboardController
         ]);
     }
 
-    #[Route('/admin/cv', name: 'easyadmin_cv', methods:'get')]
+    #[Route('/admin/logs', name: 'easyadmin_logs', methods: ['GET', 'POST'])]
+    public function logs(): Response
+    {
+        $files = $this->fileManager->getPathLogs();
+
+        if ($this->requestStack->getCurrentRequest()->getMethod() === 'POST') {
+            $formData = $this->requestStack->getCurrentRequest()->get('form');
+            $from = $formData['from'] !== '' ? $formData['from'] - 1 : null;
+            $to = $formData['to'] !== '' ? $formData['to'] - 1 : null;
+            $logReader = new LogReader($formData['file']);
+            $lines = $logReader->readLogs($from, $to);
+        }
+
+        return $this->render('easyadmin/logs.html.twig', [
+            'startLineNumber' => isset($logReader) ? $logReader->getStartLine() : 0,
+            'lines'           => $lines ?? null,
+            'files'           => $this->prepareSelectInput($files),
+            'formData'        => $formData ?? [],
+        ]);
+    }
+
+    private function prepareSelectInput(array $files): array
+    {
+        foreach ($files as $file) {
+            ;
+            $explode = explode('/', $file);
+            $data[$file] = end($explode) . ' (lines ' . (new LogReader($file))->getCountLines() . ')';
+        }
+
+        return $data ?? [];
+    }
+
+    #[Route('/admin/cv', name: 'easyadmin_cv', methods: 'GET')]
     public function cv(): Response
     {
         $form = $this->createForm(CVType::class, null, [
@@ -120,6 +153,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud(CronJob::class, 'fa fa-list-alt', CronJob::class);
         yield MenuItem::linkToCrud(CronReport::class, 'fa fa-scroll', CronReport::class);
         yield MenuItem::linkToCrud(MessengerMessages::class, 'fas fa-train', MessengerMessages::class);
+        yield MenuItem::linkToUrl('Logs', 'fas fa-toilet-paper', $this->generateUrl('easyadmin_logs'));
         yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'));
         yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'));
     }

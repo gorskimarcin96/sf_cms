@@ -1,0 +1,59 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Log reader{% endblock %}
+
+{% block main %}
+    <div id="main" class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">Form</div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="input-group">
+                            <select class="form-control" name="form[file]">
+                                {% for file,title in files %}
+                                    <option value="{{ file }}"
+                                            {{ formData['file'] is defined and formData['file'] == file ? 'selected=""' }}>
+                                        {{ title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <input type="number" class="form-control" placeholder="From" name="form[from]"
+                                   value="{{ formData['from'] is defined ? formData['from'] }}">
+                            <input type="number" class="form-control" placeholder="To" name="form[to]"
+                                   value="{{ formData['to'] is defined ? formData['to'] }}">
+                            <button class="btn btn-primary" type="submit">Show</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mt-2">
+            <div class="card">
+                <div class="card-header">Logs</div>
+                <div class="card-body">
+                    {% set lineNumber = startLineNumber %}
+                    {% for line in lines %}
+                        <div>
+                            <span>{{ lineNumber }}. </span>
+                            <span class="
+                                {{ 'CRITICAL' in line ? 'text-danger' }}
+                                {{ 'ERROR'    in line ? 'text-danger' }}
+                                {{ 'WARNING'  in line ? 'text-warning' }}
+                                {{ 'INFO'     in line ? 'text-info' }}
+                            ">{{ line }}</span>
+                        </div>
+                        {% set lineNumber = lineNumber + 1 %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .btn {
+            height: 33px !important;
+        }
+    </style>
+{% endblock %}

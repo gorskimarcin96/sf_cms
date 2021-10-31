@@ -15,6 +15,7 @@ services:
         autoconfigure: true
         public: true
         bind:
+            $projectDir: '%kernel.project_dir%'
             $seleniumUrl: '%env(SELENIUM_URL)%'
 
     App\:
@@ -28,3 +29,6 @@ services:
             - '@App\Utils\Encryption\EncryptionManager'
         tags:
             - { name: doctrine.event_listener, event: postLoad }
+
+    App\Utils\File\LogReader:
+        public: false
