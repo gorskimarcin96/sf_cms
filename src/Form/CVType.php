@@ -14,7 +14,7 @@ class CVType extends AbstractType
         $builder->add('cv', CKEditorType::class, [
             'data' => $options['cv'],
             'config' => [
-                'height' => 1000,
+                'height' => 2500,
             ],
         ]);
     }

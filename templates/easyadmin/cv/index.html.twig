@@ -1,10 +1,10 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 {% block main %}
-    <div class="position-absolute" style="top: 0; left: 0; width: 100vw;height: 100vh;z-index: 3000; overflow: hidden;">
-        <div class="px-3">
+    <div class="position-absolute">
+        <div class="px-2">
             <div class="row bg-dark">
-                <div class="col-6 p-0">
+                <div class="col-6 p-0 cv-form">
                     <div class="text-right mt-2">
                         <button class="btn btn-success cv-save"
                                 data-url="{{ url('easyadmin_cv_preview',{preview:CV}) }}">
@@ -22,14 +22,33 @@
                     {{ form_start(form) }}
                     {{ form_widget(form.cv) }}
                     {{ form_end(form) }}
-
                 </div>
 
                 <div class="col-6 p-0">
-                    <embed src="{{ asset('upload/CV_DRAFT.pdf') }}" type="application/pdf" width="100%" height="1200px"
+                    <embed src="{{ asset('upload/CV_DRAFT.pdf') }}" type="application/pdf" width="100%" height="100%"
                            id="cv"/>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .position-absolute {
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 3000;
+            overflow: hidden;
+        }
+
+        .cv-form{
+            height: 100vh;
+            overflow: auto;
+        }
+    </style>
 {% endblock %}
