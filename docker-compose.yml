@@ -77,12 +77,12 @@ services:
     networks:
       - app-network
   node:
-    image: node:15
+    image: node:16
     restart: always
     container_name: "${APP_NAME}-node"
     volumes:
       - .:/var/www/html
-    command: sh -c "npm install -g npm && cd /var/www/html && npm install && npx encore dev"
+    command: sh -c "npm install -g npm && cd /var/www/html && npm install && npm audit fix && npx encore dev --watch"
     networks:
       - app-network
   selenium-hub:

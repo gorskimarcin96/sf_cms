@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Counter;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,25 +21,25 @@ class CounterRepository extends ServiceEntityRepository
         parent::__construct($registry, Counter::class);
     }
 
-    public function getRefreshForChart(int $days)
+    public function getSumRefreshWithDateLastDays(int $days)
     {
         return $this->queryBuilderChart($days)
-            ->select('sum(d.refresh) AS y, d.date as x')
+            ->select('sum(d.refresh) AS value, d.date as date')
             ->getQuery()
             ->getResult();
     }
 
-    public function getEntriesForChart(int $days)
+    public function getSumEntriesWithDateLastDays(int $days)
     {
         return $this->queryBuilderChart($days)
-            ->select('count(d.ip) AS y, d.date as x')
+            ->select('count(d.ip) AS value, d.date as date')
             ->getQuery()
             ->getResult();
     }
 
     private function queryBuilderChart(int $days): QueryBuilder
     {
-        $now = new \DateTime();
+        $now = new DateTime();
 
         return $this->createQueryBuilder('d')
             ->andWhere('d.date <= :dateFrom')
@@ -70,7 +71,7 @@ class CounterRepository extends ServiceEntityRepository
 
     private function sumQueryBuilderForDays(int $days): QueryBuilder
     {
-        $now = new \DateTime();
+        $now = new DateTime();
 
         return $this->createQueryBuilder('d')
             ->andWhere('d.date <= :dateFrom')

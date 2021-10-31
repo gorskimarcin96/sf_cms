@@ -7,6 +7,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\OfferRepository;
 use App\Repository\RealizationRepository;
 use App\Repository\SliderRepository;
+use App\Utils\Features\Both\Counter\CounterManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,25 +19,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class WebsiteController extends AbstractController
 {
+    public function __construct(CounterManager $cs)
+    {
+        $cs->entry();
+    }
+
     #[Route('/', name: 'homepage')]
     public function index(
-        Request $request,
-        SliderRepository $sliderRepository,
-        ArticleRepository $articleRepository,
-        OfferRepository $offerRepository,
+        Request               $request,
+        SliderRepository      $sliderRepository,
+        ArticleRepository     $articleRepository,
+        OfferRepository       $offerRepository,
         RealizationRepository $realizationRepository
     ): Response {
         return $this->render('website/homepage.html.twig', [
-            'sliders' => $sliderRepository->findByLocale($request->getLocale()),
-            'articles' => $articleRepository->findByLocale($request->getLocale()),
-            'offers' => $offerRepository->findByLocale($request->getLocale()),
+            'sliders'      => $sliderRepository->findByLocale($request->getLocale()),
+            'articles'     => $articleRepository->findByLocale($request->getLocale()),
+            'offers'       => $offerRepository->findByLocale($request->getLocale()),
             'realizations' => $realizationRepository->findAllOrderByCreatedAtDesc(),
         ]);
     }
 
-    /**
-     * @Route({"pl": "/kontakt", "en": "/contact"}, name="contact")
-     */
+    #[Route(['pl' => 'kontakt', 'en' => 'contact'], name: 'contact')]
     public function contact(Request $request, TranslatorInterface $translator, MailerInterface $mailer): Response
     {
         $form = $this->createForm(MailType::class);
@@ -52,7 +56,7 @@ class WebsiteController extends AbstractController
                     ->subject('Formularz kontaktowy mgorski.dev')
                     ->html(
                         $this->renderView('website/email.html.twig', [
-                            'email' => $data['email'],
+                            'email'       => $data['email'],
                             'description' => $data['message'],
                         ])
                     );

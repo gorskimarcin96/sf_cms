@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Constant;
+use App\Entity\Date;
 use App\Entity\MessengerMessages;
 use App\Entity\Offer;
 use App\Entity\Realization;
@@ -11,8 +12,12 @@ use App\Entity\Slider;
 use App\Entity\Task;
 use App\Form\CVType;
 use App\Repository\ConstantRepository;
+use App\Utils\Date\DateManager;
+use App\Utils\Features\Backend\ChartCounter;
 use App\Utils\Features\Backend\PdfManager;
-use App\Utils\Features\CounterService;
+use App\Utils\Features\Both\Counter\CounterChart;
+use App\Utils\Features\Both\Counter\CounterStatistic;
+use App\Utils\Features\CounterManager;
 use Cron\CronBundle\Entity\CronJob;
 use Cron\CronBundle\Entity\CronReport;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -26,26 +31,23 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(
-        private CounterService $cs,
+        private CounterStatistic   $counterStatistic,
+        private CounterChart       $counterChart,
         private ConstantRepository $constantRepository,
-        private PdfManager $pdfManager
+        private PdfManager         $pdfManager
     ) {
     }
 
-    /**
-     * @Route("/admin", name="easyadmin_dashboard")
-     */
+    #[Route('/admin', name: 'easyadmin_dashboard')]
     public function index(): Response
     {
         return $this->render('easyadmin/dashboard.html.twig', [
-            'chart_data' => json_encode($this->cs->getChartData(), JSON_THROW_ON_ERROR),
-            'statics_data' => $this->cs->getStatistics(),
+            'charts'       => $this->counterChart->get(),
+            'statics_data' => $this->counterStatistic->get(),
         ]);
     }
 
-    /**
-     * @Route("/admin/cv", name="easyadmin_cv", methods="GET")
-     */
+    #[Route('/admin/cv', name: 'easyadmin_cv', methods:'get')]
     public function cv(): Response
     {
         $form = $this->createForm(CVType::class, null, [
@@ -53,15 +55,13 @@ class DashboardController extends AbstractDashboardController
         ]);
 
         return $this->render('easyadmin/cv/index.html.twig', [
-            'CV' => Constant::CV,
+            'CV'       => Constant::CV,
             'CV_DRAFT' => Constant::CV_DRAFT,
-            'form' => $form->createView(),
+            'form'     => $form->createView(),
         ]);
     }
 
-    /**
-     * @Route("/admin/cv/save/{preview}", name="easyadmin_cv_preview", methods="POST")
-     */
+    #[Route('/admin/cv/save/{preview}', name: 'easyadmin_cv_preview', methods: 'POST')]
     public function prev(Request $request, string $preview): JsonResponse
     {
         $response['success'] = false;
@@ -71,7 +71,7 @@ class DashboardController extends AbstractDashboardController
                 $data = $request->get('data');
 
                 $view = $this->renderView('easyadmin/cv/show.html.twig', ['data' => $data]);
-                $path = $this->getParameter('kernel.project_dir').'/public/upload/'.$preview.'.pdf';
+                $path = $this->getParameter('kernel.project_dir') . '/public/upload/' . $preview . '.pdf';
 
                 $this->pdfManager->createPdf($view, $path);
                 $this->constantRepository->updateConstantDescriptionByTitle($preview, $data);
@@ -85,20 +85,16 @@ class DashboardController extends AbstractDashboardController
         return new JsonResponse($response);
     }
 
-    /**
-     * @Route("/admin/cv/revert", name="easyadmin_cv_revert", methods="GET")
-     */
+    #[Route('/admin/cv/revert', name: 'easyadmin_cv_revert', methods: 'GET')]
     public function revert(): JsonResponse
     {
         return new JsonResponse([
             'success' => true,
-            'data' => $this->constantRepository->findCV(),
+            'data'    => $this->constantRepository->findCV(),
         ]);
     }
 
-    /**
-     * @Route("/admin/phpinfo", name="easyadmin_phpinfo", methods="GET")
-     */
+    #[Route('/admin/phpinfo', name: 'easyadmin_phpinfo', methods: 'GET')]
     public function phpinfo(): Response
     {
         ob_start();
