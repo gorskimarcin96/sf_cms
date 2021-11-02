@@ -1,0 +1,55 @@
+<div style="width: 700px; {{ gradient }}">
+    <div style="width: 700px;margin-top: 20px;">
+        <br>
+        <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
+            <h1>❤💋❤ Love letter ❤💋❤</h1>
+            <p>
+                Dzisiaj mija od dnia, którego się poznaliśmy dokładnie {{ days }} dni!
+                Ten wyjątkowy i niepowtarzalny dzień chce szczególnie uczcić!
+            </p>
+        </div>
+
+        {% if position is defined %}
+            <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
+                <h2>Pozycja tygodnia:</h2>
+                <h3>{{ position.title }}</h3>
+                <div style="text-align: center">
+                    <img src="cid:pozycja.png" style="opacity: 0.9;" alt="pozycja">
+                </div>
+                <div><b>{{ position.firstSection|raw }}</b></div>
+                <div>{{ position.secondSection|raw }}</div>
+                <div style="text-align: center"><i>🔥🔥🔥 Czyli co byśmy dzisiaj robili, gdybyśmy już byli po ślubie 🔥🔥🔥</i></div>
+            </div>
+        {% endif %}
+
+        <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
+            <h2>Motywator:</h2>
+            <div style="text-align: center">
+                <img src="cid:demotywator.jpg" style="opacity: 0.9;" alt="demotywator">
+            </div>
+        </div>
+
+        <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
+            <h2>Cytat życia dnia:</h2>
+            <div>{{ life_quote|raw }}</div>
+        </div>
+
+        <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
+            <h2>Na wesoło:</h2>
+            <div style="text-align: center">
+                <img src="cid:kwejk.jpg" style="opacity: 0.9;" alt="kwejk">
+            </div>
+        </div>
+
+        <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
+            <h2>Cytat z bibli:</h2>
+            <div>{{ bible_quote|raw }}</div>
+        </div>
+
+        <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;height:110px;">
+            Korospodencja Odik! Kliknij w ten <a href="#">link</a>, aby wypisać się z newslettera.
+            <img src="cid:Odi.png" style="display: block; float: right; width: 120px;" alt="Odi">
+        </div>
+        <br>
+    </div>
+</div>

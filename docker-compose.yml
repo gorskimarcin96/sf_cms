@@ -51,19 +51,6 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     networks:
       - app-network
-  phppgadmin:
-    image: neimheadh/phppgadmin:7.13.0
-    restart: always
-    container_name: "${APP_NAME}-phppgadmin"
-    environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASS: ${DATABASE_PASSWORD}
-    ports:
-      - "127.0.0.1:81:80"
-    networks:
-      - app-network
   rabbitmq:
     container_name: '${APP_NAME}-rabbitmq'
     restart: always

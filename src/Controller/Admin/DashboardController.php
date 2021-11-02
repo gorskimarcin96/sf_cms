@@ -21,6 +21,7 @@ use Cron\CronBundle\Entity\CronReport;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -110,7 +111,7 @@ class DashboardController extends AbstractDashboardController
                 $this->constantRepository->updateConstantDescriptionByTitle($preview, $data);
 
                 $response['success'] = true;
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $response = ['success' => false, 'error' => $exception->getMessage()];
             }
         }

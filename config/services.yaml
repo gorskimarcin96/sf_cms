@@ -32,3 +32,12 @@ services:
 
     App\Utils\File\LogReader:
         public: false
+
+    App\Utils\File\FileManager:
+        public: true
+
+    App\Utils\Mailer\MailerWrongTypeException:
+        public: false
+
+    App\Utils\String\StringConverter:
+        public: false

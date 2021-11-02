@@ -14,7 +14,7 @@ final class Version20211005194039 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create cron_job,cron_report tables';
     }
 
     public function up(Schema $schema): void
