@@ -12,9 +12,9 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20211128194705 extends AbstractMigration
 {
-    const TABLES = [
+    public const TABLES = [
         'article', 'constant', 'counter', 'cron_job', 'cron_report', 'messenger_messages', 'offer', 'position',
-        'realization', 'slider', 'task', 'user'
+        'realization', 'slider', 'user'
     ];
 
     public function getDescription(): string

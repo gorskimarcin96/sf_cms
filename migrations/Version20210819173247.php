@@ -25,10 +25,10 @@ final class Version20210819173247 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_CFC71007A76ED395 ON slider (user_id)');
         $this->addSql('COMMENT ON COLUMN slider.locale IS \'(DC2Type:LocaleType)\'');
         $this->addSql('ALTER TABLE slider ADD CONSTRAINT FK_CFC71007A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('INSERT INTO public.slider (id, user_id, title, locale, created_at, updated_at, file_fn) VALUES (1, 1, \'Aplikacjie webowe php, mysql, js.\', \'pl\', \'2021-08-19 17:44:02\', \'2021-08-19 17:44:02\', \'slide.jpg\');');
-        $this->addSql('INSERT INTO public.slider (id, user_id, title, locale, created_at, updated_at, file_fn) VALUES (2, 1, \'Strony internetowe.\', \'pl\', \'2021-08-19 17:44:15\', \'2021-08-19 17:44:15\', \'slide2.jpg\');');
-        $this->addSql('INSERT INTO public.slider (id, user_id, title, locale, created_at, updated_at, file_fn) VALUES (3, 1, \'Creating web applications.\', \'en\', \'2021-08-19 17:44:47\', \'2021-08-19 17:57:09\', \'slide2.jpg\');');
-        $this->addSql('INSERT INTO public.slider (id, user_id, title, locale, created_at, updated_at, file_fn) VALUES (4, 1, \'Making a high quality website.\', \'en\', \'2021-08-19 17:45:09\', \'2021-08-19 17:57:15\', \'slide.jpg\');');
+        $this->addSql('INSERT INTO slider (id, user_id, title, locale, created_at, updated_at, file_fn) VALUES (1, 1, \'Aplikacjie webowe php, mysql, js.\', \'pl\', \'2021-08-19 17:44:02\', \'2021-08-19 17:44:02\', \'slide.jpg\');');
+        $this->addSql('INSERT INTO slider (id, user_id, title, locale, created_at, updated_at, file_fn) VALUES (2, 1, \'Strony internetowe.\', \'pl\', \'2021-08-19 17:44:15\', \'2021-08-19 17:44:15\', \'slide2.jpg\');');
+        $this->addSql('INSERT INTO slider (id, user_id, title, locale, created_at, updated_at, file_fn) VALUES (3, 1, \'Creating web applications.\', \'en\', \'2021-08-19 17:44:47\', \'2021-08-19 17:57:09\', \'slide2.jpg\');');
+        $this->addSql('INSERT INTO slider (id, user_id, title, locale, created_at, updated_at, file_fn) VALUES (4, 1, \'Making a high quality website.\', \'en\', \'2021-08-19 17:45:09\', \'2021-08-19 17:57:15\', \'slide.jpg\');');
     }
 
     public function down(Schema $schema): void

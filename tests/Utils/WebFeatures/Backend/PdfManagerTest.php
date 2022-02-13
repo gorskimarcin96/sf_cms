@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Utils\Features\Backend;
+namespace App\Tests\Utils\WebFeatures\Backend;
 
-use App\Utils\Features\Backend\PdfManager;
+use App\Utils\WebFeatures\Backend\PdfManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PdfManagerTest extends KernelTestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils\Features\Backend;
+namespace App\Utils\WebFeatures\Backend;
 
 use Knp\Snappy\Pdf;
 use Symfony\Component\Filesystem\Filesystem;

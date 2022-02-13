@@ -1,0 +1,104 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}
+    Todo lists.
+{% endblock %}
+
+{% block content_title %}
+    Todo list
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#todoListForm">
+        <i class="fa fa-plus"></i>
+    </button>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-xl-6 collapse" id="todoListForm">
+            <div class="card shadow mb-3 border-primary">
+                <div class="card-header border-primary text-primary">Create todo list</div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.userAccess) }}
+                    {{ form_row(form.submit) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+        {% for todoList in todoLists %}
+            <div class="col-xl-6">
+                <div class="card shadow mb-3 todolist">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-11">{{ todoList.name }} - {{ todoList.user }}</div>
+                            <div class="col-1 text-right">
+                                <button class="btn btn-sm todo-list-done {{ todoList.hasTasksIsDone?'':'disabled' }}" type="button"
+                                        data-url="{{ urlHelper.todoListIsDoneUrl(todoList, true) }}">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if todoList.todoTasks|length %}
+                        <ul class="list-group list-group-flush">
+                            {% for todoTask in todoList.todoTasks %}
+                                <li class="list-group-item {{ todoTask.isDone ? 'bg-primary text-light' }}">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <input class="form-check-input todo-task" type="checkbox"
+                                                   data-url-is-done="{{ urlHelper.todoTaskIsDoneUrl(todoTask, true) }}"
+                                                   data-url-is-not-done="{{ urlHelper.todoTaskIsDoneUrl(todoTask, false) }}"
+                                                    {{ todoTask.isDone ? "checked='checked'" }}>
+                                        </div>
+                                        <div class="col-7">{{ todoTask.name }}</div>
+                                        <div class="col-4 text-right">
+                                            <button class="btn btn-sm {{ todoTask.fileFn!=true?'disabled' }}"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse_{{ todoList.id }}_{{ todoTask.id }}">
+                                                <i class="fa fa-image"></i>
+                                            </button>
+                                            <a class="btn btn-sm {{ todoTask.fileFn!=true?'disabled' }}"
+                                               href="{{ asset(todoTask.pathFileFn) }}" target="_blank">
+                                                <i class="fa fa-file-download"></i>
+                                            </a>
+                                            <button class="btn btn-sm {{ todoTask.description!=true?'disabled' }}"
+                                                    data-bs-toggle="tooltip" title="{{ todoTask.description }}">
+                                                <i class="fa fa-comment-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm" data-bs-toggle="tooltip"
+                                                    title="{{ todoTask.user }}">
+                                                <i class="fa fa-user"></i>
+                                            </button>
+                                            <button class="btn btn-sm" data-bs-toggle="tooltip"
+                                                    title="{{ todoTask.createdAt|date('d-m-Y H:i:s') }}">
+                                                <i class="fa fa-clock"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="collapse" id="collapse_{{ todoList.id }}_{{ todoTask.id }}">
+                                                <img src="{{ asset(todoTask.pathFileFn) }}" alt="{{ todoTask.name }}"
+                                                     class="todo-task-image">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <div class="card-body">
+
+                        {{ form_start(todoList.formView) }}
+                        {{ form_row(todoList.formView.name) }}
+                        {{ form_row(todoList.formView.description) }}
+                        {{ form_row(todoList.formView.fileFn) }}
+                        {{ form_row(todoList.formView.submit) }}
+                        {{ form_end(todoList.formView) }}
+                    </div>
+                    <div class="card-footer">User access: {{ todoList.userAccess|join(', ') }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

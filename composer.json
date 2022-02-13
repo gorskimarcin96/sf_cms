@@ -15,6 +15,7 @@
         "fresh/doctrine-enum-bundle": "^7.3",
         "friendsofsymfony/ckeditor-bundle": "^2.3",
         "knplabs/knp-snappy-bundle": "^1.8",
+        "sensio/framework-extra-bundle": "^6.2",
         "symfony/amqp-messenger": "5.3.*",
         "symfony/asset": "5.3.*",
         "symfony/console": "5.3.*",
@@ -50,7 +51,12 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
     },
     "autoload": {
         "psr-4": {

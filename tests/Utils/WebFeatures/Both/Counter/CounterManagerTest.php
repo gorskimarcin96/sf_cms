@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Utils\Features\Both\Counter;
+namespace App\Tests\Utils\WebFeatures\Both\Counter;
 
 use App\Repository\CounterRepository;
 use App\Tests\Invoker;
-use App\Utils\Features\Both\Counter\CounterManager;
+use App\Utils\WebFeatures\Both\Counter\CounterManager;
 use DateTime;
 use JetBrains\PhpStorm\NoReturn;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

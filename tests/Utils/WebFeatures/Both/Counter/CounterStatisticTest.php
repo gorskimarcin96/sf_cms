@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Utils\Features\Both\Counter;
+namespace App\Tests\Utils\WebFeatures\Both\Counter;
 
-use App\Utils\Features\Both\Counter\CounterStatistic;
+use App\Utils\WebFeatures\Both\Counter\CounterStatistic;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CounterStatisticTest extends KernelTestCase

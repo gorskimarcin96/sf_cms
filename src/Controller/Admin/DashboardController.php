@@ -11,11 +11,12 @@ use App\Entity\Slider;
 use App\Entity\Task;
 use App\Form\CVType;
 use App\Repository\ConstantRepository;
-use App\Utils\Features\Backend\PdfManager;
-use App\Utils\Features\Both\Counter\CounterChart;
-use App\Utils\Features\Both\Counter\CounterStatistic;
 use App\Utils\File\FileManager;
 use App\Utils\File\LogReader;
+use App\Utils\Helper\EasyAdmin\Url;
+use App\Utils\WebFeatures\Backend\PdfManager;
+use App\Utils\WebFeatures\Both\Counter\CounterChart;
+use App\Utils\WebFeatures\Both\Counter\CounterStatistic;
 use Cron\CronBundle\Entity\CronJob;
 use Cron\CronBundle\Entity\CronReport;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -36,13 +37,18 @@ class DashboardController extends AbstractDashboardController
         private ConstantRepository $constantRepository,
         private PdfManager         $pdfManager,
         private FileManager        $fileManager,
-        private RequestStack       $requestStack
+        private RequestStack       $requestStack,
+        private Url                $url
     ) {
     }
 
     #[Route('/admin', name: 'easyadmin_dashboard')]
     public function index(): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirect($this->url->getTodoIndex());
+        }
+
         return $this->render('easyadmin/dashboard.html.twig', [
             'charts'       => $this->counterChart->get(),
             'statics_data' => $this->counterStatistic->get(),
@@ -73,7 +79,6 @@ class DashboardController extends AbstractDashboardController
     private function prepareSelectInput(array $files): array
     {
         foreach ($files as $file) {
-            ;
             $explode = explode('/', $file);
             $data[$file] = end($explode) . ' (lines ' . (new LogReader($file))->getCountLines() . ')';
         }
@@ -145,18 +150,19 @@ class DashboardController extends AbstractDashboardController
     {
         //https://fontawesome.com/v5.15/icons?d=gallery&p=2&m=free
         yield MenuItem::linkToUrl('Homepage', 'fa fa-home', $this->generateUrl('homepage'));
-        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-desktop');
-        yield MenuItem::linkToCrud(Article::class, 'fas fa-list', Article::class);
-        yield MenuItem::linkToCrud(Offer::class, 'fas fa-newspaper', Offer::class);
-        yield MenuItem::linkToCrud(Slider::class, 'fas fa-address-card', Slider::class);
-        yield MenuItem::linkToCrud(Realization::class, 'fas fa-image', Realization::class);
-        yield MenuItem::linkToCrud(Task::class, 'fas fa-tasks', Task::class);
-        yield MenuItem::linkToCrud(CronJob::class, 'fa fa-list-alt', CronJob::class);
-        yield MenuItem::linkToCrud(CronReport::class, 'fa fa-scroll', CronReport::class);
-        yield MenuItem::linkToCrud(MessengerMessages::class, 'fas fa-train', MessengerMessages::class);
-        yield MenuItem::linkToUrl('Logs', 'fas fa-toilet-paper', $this->generateUrl('easyadmin_logs'));
-        yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'));
-        yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'));
+        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-desktop')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToRoute('Todo', 'fas fa-clipboard-list', 'easyadmin_todolist_index');
+        yield MenuItem::linkToCrud(Article::class, 'fas fa-list', Article::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(Offer::class, 'fas fa-newspaper', Offer::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(Slider::class, 'fas fa-address-card', Slider::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(Realization::class, 'fas fa-image', Realization::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(Task::class, 'fas fa-tasks', Task::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(CronJob::class, 'fa fa-list-alt', CronJob::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(CronReport::class, 'fa fa-scroll', CronReport::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(MessengerMessages::class, 'fas fa-train', MessengerMessages::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToUrl('Logs', 'fas fa-toilet-paper', $this->generateUrl('easyadmin_logs'))->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'))->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'))->setPermission('ROLE_ADMIN');
     }
 
     public function configureAssets(): Assets

@@ -63,6 +63,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private Collection $tasks;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TodoList::class, mappedBy="user")
+     */
+    private Collection $todoLists;
+
+    /**
+     * @ORM\OneToMany(targetEntity=TodoTask::class, mappedBy="user")
+     */
+    private Collection $todoTasks;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -70,6 +80,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->sliders = new ArrayCollection();
         $this->realizations = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->todoLists = new ArrayCollection();
+        $this->todoTasks = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -281,6 +293,59 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->tasks->removeElement($task) && $task->getUser() === $this) {
             $task->setUser(null);
+        }
+
+        return $this;
+    }
+
+    public function getTodoLists(): Collection
+    {
+        return $this->todoLists;
+    }
+
+    public function addTodoList(TodoList $todoList): self
+    {
+        if (!$this->todoLists->contains($todoList)) {
+            $this->todoLists[] = $todoList;
+            $todoList->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodoList(TodoList $todoList): self
+    {
+        if ($this->todoLists->removeElement($todoList) && $todoList->getuser() === $this) {
+            $todoList->setUser(null);
+        }
+
+        return $this;
+    }
+
+    public function getTodoList(): Collection
+    {
+        return $this->todoTasks;
+    }
+
+    public function getTodoTasks(): Collection
+    {
+        return $this->todoTasks;
+    }
+
+    public function addTodoTask(TodoTask $todoTask): self
+    {
+        if (!$this->todoTasks->contains($todoTask)) {
+            $this->todoTasks[] = $todoTask;
+            $todoTask->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodoTask(TodoTask $todoTask): self
+    {
+        if ($this->todoTasks->removeElement($todoTask) && $todoTask->getuser() === $this) {
+            $todoTask->setUser(null);
         }
 
         return $this;

@@ -7,7 +7,7 @@ twig:
         address: '%app.address%'
         linkedin: '%app.linkedin%'
         googleMap: '%app.google_map%'
-        frontendManager: '@App\Utils\Features\Frontend\DataManager'
+        frontendManager: '@App\Utils\WebFeatures\Frontend\DataManager'
 
 when@test:
     twig:

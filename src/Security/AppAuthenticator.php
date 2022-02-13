@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Utils\Helper\EasyAdmin\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +23,8 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private Security $security, private Url $url)
     {
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function authenticate(Request $request): PassportInterface
@@ -50,7 +48,11 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('easyadmin_dashboard'));
+        $url = $this->security->isGranted('ROLE_ADMIN')
+            ? $this->urlGenerator->generate('easyadmin_dashboard')
+            : $this->url->getTodoIndex();
+
+        return new RedirectResponse($url);
     }
 
     protected function getLoginUrl(Request $request): string

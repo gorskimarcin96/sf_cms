@@ -22,7 +22,7 @@ final class Version20210825170626 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE constant_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE constant (id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('INSERT INTO public.constant (id, title, description) VALUES (1, \'CV\', \'
+        $this->addSql('INSERT INTO constant (id, title, description) VALUES (1, \'CV\', \'
 <h1 style="text-align:center">Marcin G&oacute;rski &ndash; Programista PHP</h1>
 
 <div>
@@ -205,7 +205,7 @@ final class Version20210825170626 extends AbstractMigration
 
 <p style="text-align:justify"><span style="font-size:16px">Wyrażam zgodę na przetwarzanie danych osobowych zawartych w niniejszym dokumencie do realizacji procesu rekrutacji zgodnie z ustawą z dnia 10 maja 2018 roku o ochronie danych osobowych (Dz. Ustaw z 2018, poz. 1000) oraz zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony os&oacute;b fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO).</span></p>
 \');');
-        $this->addSql('INSERT INTO public.constant (id, title, description) VALUES (2, \'CV_DRAFT\', \'\');');
+        $this->addSql('INSERT INTO constant (id, title, description) VALUES (2, \'CV_DRAFT\', \'\');');
     }
 
     public function down(Schema $schema): void

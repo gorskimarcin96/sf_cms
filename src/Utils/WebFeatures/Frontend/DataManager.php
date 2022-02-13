@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils\Features\Frontend;
+namespace App\Utils\WebFeatures\Frontend;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

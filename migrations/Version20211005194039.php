@@ -27,7 +27,7 @@ final class Version20211005194039 extends AbstractMigration
         $this->addSql('CREATE TABLE cron_report (id INT NOT NULL, job_id INT DEFAULT NULL, run_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, run_time DOUBLE PRECISION NOT NULL, exit_code INT NOT NULL, output TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_B6C6A7F5BE04EA9 ON cron_report (job_id)');
         $this->addSql('ALTER TABLE cron_report ADD CONSTRAINT FK_B6C6A7F5BE04EA9 FOREIGN KEY (job_id) REFERENCES cron_job (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('INSERT INTO public.cron_job (id, name, command, schedule, description, enabled) VALUES (1, \'cron 1\', \'app:task:add-to-queue\', \'* * * * *\', \'\', true);');
+        $this->addSql('INSERT INTO cron_job (id, name, command, schedule, description, enabled) VALUES (1, \'cron 1\', \'app:task:add-to-queue\', \'* * * * *\', \'\', true);');
     }
 
     public function down(Schema $schema): void

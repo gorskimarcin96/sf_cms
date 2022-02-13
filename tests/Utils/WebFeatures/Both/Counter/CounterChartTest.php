@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Utils\Features\Both\Counter;
+namespace App\Tests\Utils\WebFeatures\Both\Counter;
 
 use App\Tests\Invoker;
 use App\Utils\Date\DateTimeManager;
-use App\Utils\Features\Both\Counter\CounterChart;
+use App\Utils\WebFeatures\Both\Counter\CounterChart;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\UX\Chartjs\Model\Chart;
 
