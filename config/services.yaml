@@ -26,18 +26,21 @@ services:
     entity.listener:
         class: App\EventListener\EntityListener
         arguments:
-            - '@App\Utils\Encryption\EncryptionManager'
+            - '@App\Security\EncryptionManager'
         tags:
             - { name: doctrine.event_listener, event: postLoad }
 
-    App\Utils\File\LogReader:
-        public: false
+    App\File\LogReader:
+        autowire: false
 
-    App\Utils\File\FileManager:
-        public: true
+#    App\Utils\File\FileManager:
+#        public: true
 
-    App\Utils\Mailer\MailerWrongTypeException:
-        public: false
+    App\Mailer\MailerWrongTypeException:
+        autowire: false
 
-    App\Utils\String\StringConverter:
-        public: false
+    App\String\StringConverter:
+        autowire: false
+
+    App\Mailer\AbstractMailCreator:
+        autowire: false

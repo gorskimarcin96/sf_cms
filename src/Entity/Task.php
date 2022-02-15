@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\TimeStampableTrait;
 use App\Repository\TaskRepository;
-use App\Utils\Encryption\EncryptionManager;
+use App\Security\EncryptionManager;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 

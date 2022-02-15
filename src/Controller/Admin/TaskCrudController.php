@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Task;
 use App\Message\SaveLog;
 use App\Message\SendTextInMessenger;
-use App\Utils\Encryption\EncryptionManager;
+use App\Security\EncryptionManager;
 use DateTime;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;

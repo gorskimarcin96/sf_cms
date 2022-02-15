@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\EasyAdmin\UrlHelper;
 use App\Entity\TodoList;
 use App\Entity\TodoTask;
 use App\Form\TodoListType;
@@ -9,7 +10,6 @@ use App\Form\TodoTaskType;
 use App\Repository\TodoListRepository;
 use App\Repository\TodoTaskRepository;
 use App\Repository\UserRepository;
-use App\Utils\Helper\EasyAdmin\Url;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TodoController extends AbstractController
 {
     #[Route('/index', name: 'index')]
-    public function index(TodoListRepository $todoListRepository, UserRepository $userRepository, Url $urlHelper): Response
+    public function index(TodoListRepository $todoListRepository, UserRepository $userRepository, UrlHelper $urlHelper): Response
     {
         $todoList = new TodoList();
         $todoList->setUser($this->getUser());

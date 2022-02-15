@@ -2,8 +2,8 @@
 
 namespace App\MessageHandler;
 
+use App\Mailer\MailerFactory;
 use App\Message\Mailer;
-use App\Utils\Mailer\MailerFactory;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

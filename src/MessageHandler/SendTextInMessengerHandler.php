@@ -3,7 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Message\SendTextInMessenger;
-use App\Utils\Task\Messenger\MessengerManager;
+use App\Task\Messenger\MessengerManager;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class SendTextInMessengerHandler implements MessageHandlerInterface

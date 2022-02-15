@@ -2,7 +2,7 @@
 
 namespace App\Security;
 
-use App\Utils\Helper\EasyAdmin\Url;
+use App\EasyAdmin\UrlHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator, private Security $security, private Url $url)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private Security $security, private UrlHelper $url)
     {
     }
 

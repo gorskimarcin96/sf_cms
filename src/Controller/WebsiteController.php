@@ -7,7 +7,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\OfferRepository;
 use App\Repository\RealizationRepository;
 use App\Repository\SliderRepository;
-use App\Utils\WebFeatures\Both\Counter\CounterManager;
+use App\WebFeatures\Both\Counter\CounterManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

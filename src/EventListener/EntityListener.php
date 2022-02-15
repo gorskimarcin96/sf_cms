@@ -3,7 +3,7 @@
 namespace App\EventListener;
 
 use App\Entity\Task;
-use App\Utils\Encryption\EncryptionManager;
+use App\Security\EncryptionManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class EntityListener

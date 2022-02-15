@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\EasyAdmin\UrlHelper;
 use App\Entity\Article;
 use App\Entity\Constant;
 use App\Entity\MessengerMessages;
@@ -9,14 +10,13 @@ use App\Entity\Offer;
 use App\Entity\Realization;
 use App\Entity\Slider;
 use App\Entity\Task;
+use App\File\FileManager;
+use App\File\LogReader;
 use App\Form\CVType;
 use App\Repository\ConstantRepository;
-use App\Utils\File\FileManager;
-use App\Utils\File\LogReader;
-use App\Utils\Helper\EasyAdmin\Url;
-use App\Utils\WebFeatures\Backend\PdfManager;
-use App\Utils\WebFeatures\Both\Counter\CounterChart;
-use App\Utils\WebFeatures\Both\Counter\CounterStatistic;
+use App\WebFeatures\Backend\PdfManager;
+use App\WebFeatures\Both\Counter\CounterChart;
+use App\WebFeatures\Both\Counter\CounterStatistic;
 use Cron\CronBundle\Entity\CronJob;
 use Cron\CronBundle\Entity\CronReport;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -38,7 +38,7 @@ class DashboardController extends AbstractDashboardController
         private PdfManager         $pdfManager,
         private FileManager        $fileManager,
         private RequestStack       $requestStack,
-        private Url                $url
+        private UrlHelper $url
     ) {
     }
 
