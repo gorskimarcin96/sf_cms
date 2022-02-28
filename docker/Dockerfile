@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.1-apache
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       wkhtmltopdf \
@@ -39,9 +39,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     && rm -rf /var/lib/apt/lists/* \
     && cp /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf \
     && apt-get clean
-
-#git
-RUN apt-get update && apt-get upgrade -y && apt-get install -y git
 
 #composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
