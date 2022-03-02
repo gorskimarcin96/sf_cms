@@ -6,9 +6,14 @@ use ReflectionClass;
 
 trait Invoker
 {
-    public function invokeMethod(object $object, string $methodName, array $parameters = []): mixed
+    public function invokeMethod(object $object, string $methodName, array $parameters = [], array $properties = []): mixed
     {
         $reflection = new ReflectionClass(get_class($object));
+
+        foreach ($properties as $field => $value) {
+            $reflection->getProperty($field)->setValue($object, $value);
+        }
+
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
 

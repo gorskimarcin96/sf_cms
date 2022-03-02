@@ -76,4 +76,10 @@ class WebsiteController extends AbstractController
     {
         return $this->render('website/curriculum-vitae.html.twig');
     }
+
+    #[Route('/feature-not-implemented', name: 'feature not implemented')]
+    public function featureNotImplemented(): Response
+    {
+        return $this->render('website/feature-not-implemented.html.twig');
+    }
 }

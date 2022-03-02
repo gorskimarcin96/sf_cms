@@ -17,9 +17,9 @@ class AbstractMailCreator
         $this->mailBuilder->setLayout($layout);
     }
 
-    protected function append(string $twig, array $variables = [], ?string $fileName = null): void
+    protected function append(string $twig, array $variables = [], array $fileNames = []): void
     {
-        if ($fileName) {
+        foreach ($fileNames as $fileName) {
             $this->templatedEmail->embed($this->fileManager->openFile($fileName, true), $fileName);
         }
 

@@ -6,8 +6,6 @@ use Facebook\WebDriver\Exception\StaleElementReferenceException;
 use Facebook\WebDriver\Exception\TimeoutException;
 use Facebook\WebDriver\Exception\WebDriverCurlException;
 use Facebook\WebDriver\Exception\WebDriverException;
-use Facebook\WebDriver\WebDriverBy;
-use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\Panther\Client;
 
 class DogJokes
@@ -43,7 +41,7 @@ class DogJokes
         }
     }
 
-    #[ArrayShape(['url' => "string", 'image' => "string"])] private function toArray(Client $customSeleniumClient): array
+    private function toArray(Client $customSeleniumClient): array
     {
         return [
             'url'   => $customSeleniumClient->getCurrentURL(),

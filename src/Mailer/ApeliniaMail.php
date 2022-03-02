@@ -6,12 +6,16 @@ use App\Crawler\Mem\Demotywatory;
 use App\Crawler\Mem\Kwejk;
 use App\Crawler\Quote\Biblijni;
 use App\Crawler\Quote\CytatyInfo;
+use App\DBAL\Types\LocaleType;
 use App\File\FileManager;
+use App\Repository\DogJokeRepository;
 use App\Repository\PositionRepository;
 use App\String\CssManager;
+use DateInterval;
 use DateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
 class ApeliniaMail extends AbstractMailCreator
@@ -24,16 +28,18 @@ class ApeliniaMail extends AbstractMailCreator
         private Biblijni           $biblijni,
         private CytatyInfo         $cytatyInfo,
         private PositionRepository $positionRepository,
-        private CssManager         $cssManager
-    )
-    {
+        private DogJokeRepository  $dogJokeRepository,
+        private CssManager         $cssManager,
+        private RouterInterface    $router
+    ) {
+        $this->router->getContext()->setBaseUrl('https://mgorski.dev');
+
         parent::__construct(new MailBuilder(), new TemplatedEmail(), $fileManager, $twig);
     }
 
     public function create(): TemplatedEmail
     {
         $now = new DateTime();
-        $firstApeliniaDay = new DateTime('2021-02-07');
         $style = 'style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;"';
         $this->templatedEmail
             ->priority(Email::PRIORITY_HIGH)
@@ -49,12 +55,9 @@ class ApeliniaMail extends AbstractMailCreator
             <br>
             <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
                 <h1>❤💋❤ Love letter ❤💋❤</h1>
-                <p>
-                    Dzisiaj mija od dnia, którego się poznaliśmy dokładnie {{ days }} dni!
-                    Ten wyjątkowy i niepowtarzalny dzień chce szczególnie uczcić!
-                </p>
+                <p>Jesteśmy razem {{ time }}! Ten wyjątkowy i niepowtarzalny dzień chce szczególnie uczcić!</p>
             </div>
-        ', ['style' => $style, 'days' => $firstApeliniaDay->diff($now)->days]);
+        ', ['style' => $style, 'time' => $this->getApeliniaTime()]);
 
         if ($now->format('N') === "6") {
             $fileName = 'pozycja.png';
@@ -73,7 +76,7 @@ class ApeliniaMail extends AbstractMailCreator
                     <div>{{ position.secondSection|raw }}</div>
                     <div style="text-align: center"><i>🔥🔥🔥 Czyli co byśmy dzisiaj robili, gdybyśmy już byli po ślubie 🔥🔥🔥</i></div>
                 </div>
-            ', ['style' => $style, 'position' => $position], $fileName);
+            ', ['style' => $style, 'position' => $position], [$fileName]);
         }
 
         $fileName = 'demotywator.jpg';
@@ -85,7 +88,7 @@ class ApeliniaMail extends AbstractMailCreator
                     <img src="cid:demotywator.jpg" style="opacity: 0.9;" alt="demotywator">
                 </div>
             </div>
-        ', ['style' => $style], $fileName);
+        ', ['style' => $style], [$fileName]);
 
         $this->append('
             <div {{ style|raw }}>
@@ -103,7 +106,61 @@ class ApeliniaMail extends AbstractMailCreator
                     <img src="cid:kwejk.jpg" style="opacity: 0.9;" alt="kwejk">
                 </div>
             </div>
-        ', ['style' => $style], $fileName);
+        ', ['style' => $style], [$fileName]);
+
+        if (rand(0, 2)) {
+            foreach ($this->dogJokeRepository->randSixNormal() as $key => $dogJoke) {
+                $imgs[$key] = sprintf('dog_joke_%s.jpg', $key);
+                $this->fileManager->saveFile(file_get_contents($dogJoke->getImage()), $imgs[$key], true);
+            }
+
+            $this->append('
+                <div {{ style|raw }}>
+                    <h2>Psie sucharki:</h2>
+                    <div style="max-width: 100%;text-align: center;">
+                        <table style="background:rgba(200,0,200,0.8);">
+                            <tr>
+                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_0.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_1.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                            </tr>
+                            <tr>
+                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_2.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_3.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                            </tr>
+                            <tr>
+                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_4.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_5.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            ', ['style' => $style], $imgs ?? []);
+        } else {
+            foreach ($this->dogJokeRepository->randToCollage() as $key => $dogJoke) {
+                $imgs[$key] = sprintf('dog_joke_%s.jpg', $key);
+                $this->fileManager->saveFile(file_get_contents($dogJoke->getImage()), $imgs[$key], true);
+            }
+
+            $this->append('
+                <div {{ style|raw }}>
+                    <h2>Psie sucharki:</h2>
+                    <div style="max-width: 100%;text-align: center;">
+                        <table style="background:rgba(200,0,200,0.8);">
+                            <tr>
+                                <td style="background:rgba(255,255,255,0.4)" colspan="2"><img src="cid:dog_joke_0.jpg" style="opacity: 0.9;max-width: 100%;padding: 3px;" alt="dog_joke"></td>
+                            </tr>
+                            <tr>
+                                <td style="background:rgba(255,255,255,0.4)" rowspan="2"><img src="cid:dog_joke_1.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_2.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                            </tr>
+                            <tr>
+                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_3.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            ', ['style' => $style], $imgs ?? []);
+        }
 
         $this->append('
             <div {{ style|raw }}>
@@ -114,12 +171,59 @@ class ApeliniaMail extends AbstractMailCreator
 
         $this->append('
             <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;height:110px;">
-                Korospodencja Odik! Kliknij w ten <a href="#">link</a>, aby wypisać się z newslettera.
+                Korospodencja Odik! Kliknij w ten <a href="{{ unsubscribe_url }}">link</a>, aby wypisać się z newslettera.
                 <img src="cid:Odi.png" style="display: block; float: right; width: 120px;" alt="Odi">
             </div>
             <br>
-        ', [], 'Odi.png');
+        ', ['unsubscribe_url' => $this->router->generate('feature not implemented', ['_locale' => LocaleType::POLISH])], ['Odi.png']);
 
         return $this->templatedEmail->html($this->mailBuilder->renderHtml());
+    }
+
+    private function getApeliniaTime(): string
+    {
+        $now = new DateTime();
+        $date = '';
+
+        $firstApeliniaDay = new DateTime('2021-02-07');
+        $years = $firstApeliniaDay->diff($now)->y;
+        $firstApeliniaDay->add(new DateInterval(sprintf("P%sY", $firstApeliniaDay->diff($now)->y)));
+        $months = $firstApeliniaDay->diff($now)->m;
+        $firstApeliniaDay->add(new DateInterval(sprintf("P%sM", $firstApeliniaDay->diff($now)->m)));
+        $days = $firstApeliniaDay->diff($now)->d;
+
+        if ($years === 1) {
+            $date .= $years . ' rok';
+        } elseif ($years > 1) {
+            $date .= $years . ' lat';
+        }
+
+        if ($months) {
+            if ($years) {
+                $date .= $days ? ', ' : ' i ';
+            }
+
+            if ($months === 1) {
+                $date .= $months . ' miesiąc';
+            } elseif (in_array($months, [2, 3, 4])) {
+                $date .= $months . ' miesiące';
+            } elseif ($months > 0) {
+                $date .= $months . ' miesiący';
+            }
+        }
+
+        if ($days) {
+            if ($years || $months) {
+                $date .= ' i ';
+            }
+
+            if ($days === 1) {
+                $date .= $days . ' dzień';
+            } else {
+                $date .= $days . ' dni';
+            }
+        }
+
+        return $date;
     }
 }
