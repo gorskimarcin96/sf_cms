@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Position;
+use App\Repository\Traits\RandTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -11,38 +12,15 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Position|null findOneBy(array $criteria, array $orderBy = null)
  * @method Position[]    findAll()
  * @method Position[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Position|null getIds($primaryKey = 'id')
+ * @method Position|null randOne()
  */
 class PositionRepository extends ServiceEntityRepository
 {
+    use RandTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Position::class);
-    }
-
-    public function getIds(): array
-    {
-        $ids = $this->createQueryBuilder('p')
-            ->select('p.id')
-            ->getQuery()
-            ->getResult();
-
-        foreach ($ids as $id) {
-            $data[] = $id['id'];
-        }
-
-        return $data ?? [];
-    }
-
-    public function randOne(): ?Position
-    {
-        $ids = $this->getIds();
-
-        if (!count($ids)) {
-            return null;
-        }
-
-        $key = array_rand($ids);
-
-        return $this->find($ids[$key]);
     }
 }

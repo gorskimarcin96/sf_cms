@@ -23,12 +23,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class SaveDogJokesCommand extends Command
 {
-    private const SLEEP = 30;
+    private const SLEEP = 10;
+    private const ERROR_LIMIT = 5;
     private int $i = 0;
+    private int $errorNumber = 0;
     private ProgressBar $progressBar;
 
-    public function __construct(private DogJokes $dogJokes, private DogJokeRepository $dogJokeRepository, private EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        private DogJokes               $dogJokes,
+        private DogJokeRepository      $dogJokeRepository,
+        private EntityManagerInterface $entityManager
+    ) {
         parent::__construct();
     }
 
@@ -52,25 +57,33 @@ class SaveDogJokesCommand extends Command
     {
         try {
             $this->save();
-        } catch (StaleElementReferenceException|WebDriverCurlException|TimeoutException $exception) {
+        } catch (StaleElementReferenceException|WebDriverCurlException|WebDriverException|TimeoutException $exception) {
+            $this->errorNumber++;
             $io->newLine(2);
             $io->note(sprintf('Catch %s exception.', $exception::class));
-            $io->note(sprintf('Timeout %s seconds.', self::SLEEP));
 
-            $progressBarSleep = new ProgressBar($output, self::SLEEP);
-            $progressBarSleep->start();
-            for ($i = 0; $i < self::SLEEP; $i++) {
-                $progressBarSleep->advance();
-                sleep(1);
+            if ($this->errorNumber <= self::ERROR_LIMIT) {
+                $io->note(sprintf('Timeout %s seconds.', self::SLEEP));
+
+                $progressBarSleep = new ProgressBar($output, self::SLEEP);
+                $progressBarSleep->start();
+                for ($i = 0; $i < self::SLEEP; $i++) {
+                    $progressBarSleep->advance();
+                    sleep(1);
+                }
+                $progressBarSleep->finish();
+                $this->saveAll($io, $output);
+            } else {
+                $io->error('Too many errors.');
             }
-            $progressBarSleep->finish();
-            $this->saveAll($io, $output);
         }
     }
 
     /**
-     * @throws WebDriverException
      * @throws TimeoutException
+     * @throws WebDriverException
+     * @throws WebDriverCurlException
+     * @throws StaleElementReferenceException
      */
     private function save(): void
     {

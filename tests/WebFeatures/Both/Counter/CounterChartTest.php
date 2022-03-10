@@ -3,7 +3,7 @@
 namespace App\Tests\WebFeatures\Both\Counter;
 
 use App\Date\DateTimeManager;
-use App\Tests\Invoker;
+use App\Faker\Invoker;
 use App\WebFeatures\Both\Counter\CounterChart;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\UX\Chartjs\Model\Chart;

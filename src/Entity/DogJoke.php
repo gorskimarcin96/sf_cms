@@ -28,7 +28,7 @@ class DogJoke
     private ?string $url;
 
     /**
-     * @ORM\Column(type="string", length=500, unique=true)
+     * @ORM\Column(type="text")
      */
     private ?string $image;
 
@@ -66,7 +66,7 @@ class DogJoke
 
     public function setImage(string $image): self
     {
-        $this->image = $image;
+        $this->image = base64_encode(file_get_contents($image));
 
         return $this;
     }

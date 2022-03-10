@@ -2,8 +2,8 @@
 
 namespace App\Tests\String;
 
+use App\Faker\Invoker;
 use App\String\CssManager;
-use App\Tests\Invoker;
 use PHPUnit\Framework\TestCase;
 
 class CssManagerTest extends TestCase

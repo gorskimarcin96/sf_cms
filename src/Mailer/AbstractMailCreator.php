@@ -25,4 +25,9 @@ class AbstractMailCreator
 
         $this->mailBuilder->append($this->twig->createTemplate($twig)->render($variables));
     }
+
+    protected function clearElements(): void
+    {
+        $this->mailBuilder->clearElements();
+    }
 }
