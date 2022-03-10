@@ -11,3 +11,4 @@ docker-compose exec app-web ./bin/console doctrine:migrations:migrate -n --env=t
 docker-compose exec app-web php -d memory_limit=4G vendor/bin/php-cs-fixer fix src
 docker-compose exec app-web php -d memory_limit=4G vendor/bin/phpstan analyze src
 docker-compose exec app-web php -d memory_limit=4G ./bin/phpunit
+docker-compose exec app-web bin/console app:save-dog-jokes

@@ -2,8 +2,8 @@
 
 namespace App\Tests\WebFeatures\Both\Counter;
 
+use App\Faker\Invoker;
 use App\Repository\CounterRepository;
-use App\Tests\Invoker;
 use App\WebFeatures\Both\Counter\CounterManager;
 use DateTime;
 use JetBrains\PhpStorm\NoReturn;

@@ -11,6 +11,7 @@ use App\File\FileManager;
 use App\Repository\DogJokeRepository;
 use App\Repository\PositionRepository;
 use App\String\CssManager;
+use App\String\Traits\TimeToPolishStringTrait;
 use DateInterval;
 use DateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -20,6 +21,11 @@ use Twig\Environment;
 
 class ApeliniaMail extends AbstractMailCreator
 {
+    use TimeToPolishStringTrait;
+
+    private const FIRST_TIME = '2021-02-07';
+    private const WEDDING_TIME = '2023-09-02 13:00';
+
     public function __construct(
         Environment                $twig,
         private FileManager        $fileManager,
@@ -39,12 +45,13 @@ class ApeliniaMail extends AbstractMailCreator
 
     public function create(): TemplatedEmail
     {
-        $now = new DateTime();
+        $now = DateTime::createFromFormat('U', time());
         $style = 'style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;"';
         $this->templatedEmail
             ->priority(Email::PRIORITY_HIGH)
             ->subject('Love letter ' . $now->format('Y-m-d'));
 
+        $this->clearElements();
         $this->setLayout('
             <div style="width: 700px;' . $this->cssManager->randGradient() . '">
                 <div style="width: 700px;margin-top: 20px;">{{ body }}</div>
@@ -55,28 +62,41 @@ class ApeliniaMail extends AbstractMailCreator
             <br>
             <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
                 <h1>❤💋❤ Love letter ❤💋❤</h1>
-                <p>Jesteśmy razem {{ time }}! Ten wyjątkowy i niepowtarzalny dzień chce szczególnie uczcić!</p>
+                <p>Jesteśmy razem {{ firstTimeFormat }}! Ten wyjątkowy i niepowtarzalny dzień chce szczególnie uczcić!</p>
+                <p>{{ weddingTime > "now" ? "Do ślubu zostało" : "Jesteśmy po ślubie" }} {{ weddingTimeFormat }}.</p>
             </div>
-        ', ['style' => $style, 'time' => $this->getApeliniaTime()]);
+        ', [
+                'style'             => $style,
+                'firstTimeFormat'   => $this->getApeliniaFirstTime(),
+                'weddingTime'       => new DateTime(self::WEDDING_TIME),
+                'weddingTimeFormat' => $this->getApeliniaWeddingTime(),
+            ]
+        );
 
         if ($now->format('N') === "6") {
             $fileName = 'pozycja.png';
-
-            $position = $this->positionRepository->randOne();
-            $this->fileManager->saveFile($position->getImage(), $fileName, true);
-
-            $this->append('
-                <div {{ style|raw }}>
-                    <h2>Pozycja tygodnia:</h2>
-                    <h3>{{ position.title }}</h3>
-                    <div style="text-align: center">
-                        <img src="cid:pozycja.png" style="opacity: 0.9;" alt="pozycja">
+            if (null !== ($position = $this->positionRepository->randOne())) {
+                $this->fileManager->saveFile($position->getImage(), $fileName, true);
+                $this->append('
+                    <div {{ style|raw }}>
+                        <h2>Pozycja tygodnia:</h2>
+                        <h3>{{ position.title }}</h3>
+                        <div style="text-align: center">
+                            <img src="cid:pozycja.png" style="opacity: 0.9;" alt="pozycja">
+                        </div>
+                        <div><b>{{ position.firstSection|raw }}</b></div>
+                        <div>{{ position.secondSection|raw }}</div>
+                        <div style="text-align: center"><i>🔥🔥🔥 Czyli co byśmy dzisiaj robili, gdybyśmy już byli po ślubie 🔥🔥🔥</i></div>
                     </div>
-                    <div><b>{{ position.firstSection|raw }}</b></div>
-                    <div>{{ position.secondSection|raw }}</div>
-                    <div style="text-align: center"><i>🔥🔥🔥 Czyli co byśmy dzisiaj robili, gdybyśmy już byli po ślubie 🔥🔥🔥</i></div>
-                </div>
-            ', ['style' => $style, 'position' => $position], [$fileName]);
+                ', ['style' => $style, 'position' => $position], [$fileName]);
+            }
+        } elseif ($now->format('N') === "7") {
+            $this->append('
+            <div {{ style|raw }}>
+                <h2>Cytat z bibli:</h2>
+                <div>{{ bible_quote|raw }}</div>
+            </div>
+        ', ['style' => $style, 'bible_quote' => $this->biblijni->getRandQuote()]);
         }
 
         $fileName = 'demotywator.jpg';
@@ -108,66 +128,18 @@ class ApeliniaMail extends AbstractMailCreator
             </div>
         ', ['style' => $style], [$fileName]);
 
-        if (rand(0, 2)) {
-            foreach ($this->dogJokeRepository->randSixNormal() as $key => $dogJoke) {
-                $imgs[$key] = sprintf('dog_joke_%s.jpg', $key);
-                $this->fileManager->saveFile(file_get_contents($dogJoke->getImage()), $imgs[$key], true);
-            }
-
+        $fileName = 'dog_joke.jpg';
+        if ((null !== $dogJoke = $this->dogJokeRepository->randOne())) {
+            $this->fileManager->saveFile($dogJoke->getImage(), $fileName, true);
             $this->append('
                 <div {{ style|raw }}>
                     <h2>Psie sucharki:</h2>
-                    <div style="max-width: 100%;text-align: center;">
-                        <table style="background:rgba(200,0,200,0.8);">
-                            <tr>
-                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_0.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_1.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                            </tr>
-                            <tr>
-                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_2.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_3.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                            </tr>
-                            <tr>
-                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_4.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_5.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                            </tr>
-                        </table>
+                    <div style="text-align: center">
+                        <img src="cid:dog_joke.jpg" style="opacity: 0.9;" alt="dog_joke">
                     </div>
                 </div>
-            ', ['style' => $style], $imgs ?? []);
-        } else {
-            foreach ($this->dogJokeRepository->randToCollage() as $key => $dogJoke) {
-                $imgs[$key] = sprintf('dog_joke_%s.jpg', $key);
-                $this->fileManager->saveFile(file_get_contents($dogJoke->getImage()), $imgs[$key], true);
-            }
-
-            $this->append('
-                <div {{ style|raw }}>
-                    <h2>Psie sucharki:</h2>
-                    <div style="max-width: 100%;text-align: center;">
-                        <table style="background:rgba(200,0,200,0.8);">
-                            <tr>
-                                <td style="background:rgba(255,255,255,0.4)" colspan="2"><img src="cid:dog_joke_0.jpg" style="opacity: 0.9;max-width: 100%;padding: 3px;" alt="dog_joke"></td>
-                            </tr>
-                            <tr>
-                                <td style="background:rgba(255,255,255,0.4)" rowspan="2"><img src="cid:dog_joke_1.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_2.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                            </tr>
-                            <tr>
-                                <td style="background:rgba(255,255,255,0.4)"><img src="cid:dog_joke_3.jpg" style="opacity: 0.9;max-width: 320px;padding: 3px;" alt="dog_joke"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            ', ['style' => $style], $imgs ?? []);
+            ', ['style' => $style], [$fileName]);
         }
-
-        $this->append('
-            <div {{ style|raw }}>
-                <h2>Cytat z bibli:</h2>
-                <div>{{ bible_quote|raw }}</div>
-            </div>
-        ', ['style' => $style, 'bible_quote' => $this->biblijni->getRandQuote()]);
 
         $this->append('
             <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;height:110px;">
@@ -180,50 +152,13 @@ class ApeliniaMail extends AbstractMailCreator
         return $this->templatedEmail->html($this->mailBuilder->renderHtml());
     }
 
-    private function getApeliniaTime(): string
+    private function getApeliniaFirstTime(): string
     {
-        $now = new DateTime();
-        $date = '';
+        return $this->getStringCalculateTime(new DateTime(self::FIRST_TIME));
+    }
 
-        $firstApeliniaDay = new DateTime('2021-02-07');
-        $years = $firstApeliniaDay->diff($now)->y;
-        $firstApeliniaDay->add(new DateInterval(sprintf("P%sY", $firstApeliniaDay->diff($now)->y)));
-        $months = $firstApeliniaDay->diff($now)->m;
-        $firstApeliniaDay->add(new DateInterval(sprintf("P%sM", $firstApeliniaDay->diff($now)->m)));
-        $days = $firstApeliniaDay->diff($now)->d;
-
-        if ($years === 1) {
-            $date .= $years . ' rok';
-        } elseif ($years > 1) {
-            $date .= $years . ' lat';
-        }
-
-        if ($months) {
-            if ($years) {
-                $date .= $days ? ', ' : ' i ';
-            }
-
-            if ($months === 1) {
-                $date .= $months . ' miesiąc';
-            } elseif (in_array($months, [2, 3, 4])) {
-                $date .= $months . ' miesiące';
-            } elseif ($months > 0) {
-                $date .= $months . ' miesiący';
-            }
-        }
-
-        if ($days) {
-            if ($years || $months) {
-                $date .= ' i ';
-            }
-
-            if ($days === 1) {
-                $date .= $days . ' dzień';
-            } else {
-                $date .= $days . ' dni';
-            }
-        }
-
-        return $date;
+    private function getApeliniaWeddingTime(): string
+    {
+        return $this->getStringCalculateTime(new DateTime(self::WEDDING_TIME));
     }
 }

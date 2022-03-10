@@ -7,6 +7,11 @@ class MailBuilder
     private string $layout = '{{ body }}';
     private array $elements = [];
 
+    public function clearElements()
+    {
+        $this->elements = [];
+    }
+
     public function setLayout(string $layout): MailBuilder
     {
         $this->layout = $layout;

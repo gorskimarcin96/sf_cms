@@ -42,3 +42,13 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 
 #composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+#uopz
+RUN git clone https://github.com/krakjoe/uopz.git \
+  && cd uopz \
+  && phpize \
+  && ./configure --enable-uopz \
+  && make \
+  && make test \
+  && make install \
+  && rm -rf uopz

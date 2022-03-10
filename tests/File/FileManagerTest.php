@@ -2,8 +2,8 @@
 
 namespace App\Tests\File;
 
+use App\Faker\Invoker;
 use App\File\FileManager;
-use App\Tests\Invoker;
 use PHPUnit\Framework\TestCase;
 
 class FileManagerTest extends TestCase

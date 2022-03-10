@@ -23,7 +23,7 @@ class Position
     private ?string $title;
 
     /**
-     * @ORM\Column(type="text", length=255)
+     * @ORM\Column(type="text")
      */
     private ?string $image;
 

@@ -33,12 +33,14 @@ class DogJokes
         $customSeleniumClient->waitFor(self::IMG_ELEMENT);
 
         while ($url !== $actualUrl) {
-            $actualUrl = $customSeleniumClient->getCurrentURL();
             $customSeleniumClient->executeScript(self::JAVASCRIPT_CLICK_PREV);
             $customSeleniumClient->waitFor(self::IMG_ELEMENT);
+            $actualUrl = $customSeleniumClient->getCurrentURL();
 
             yield $this->toArray($customSeleniumClient);
         }
+
+        $customSeleniumClient->close();
     }
 
     private function toArray(Client $customSeleniumClient): array
