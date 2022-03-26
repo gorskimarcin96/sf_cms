@@ -14,12 +14,11 @@ final class Version20210825170626 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create constant table';
+        return 'Created constant table.';
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE constant_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE constant (id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('INSERT INTO constant (id, title, description) VALUES (1, \'CV\', \'
@@ -210,7 +209,6 @@ final class Version20210825170626 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE constant_id_seq CASCADE');
         $this->addSql('DROP TABLE constant');

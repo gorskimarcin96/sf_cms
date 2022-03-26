@@ -2,7 +2,7 @@
 
 namespace App\Tests\EasyAdmin;
 
-use App\EasyAdmin\UrlHelper;
+use App\EasyAdmin\Helper\UrlHelper;
 use App\Entity\TodoList;
 use App\Entity\TodoTask;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

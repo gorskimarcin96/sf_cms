@@ -14,19 +14,17 @@ final class Version20210819194414 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create counter table';
+        return 'Created counter table';
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE counter_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE counter (id INT NOT NULL, session_id VARCHAR(255) NOT NULL, ip VARCHAR(255) NOT NULL, refresh INT NOT NULL, entry INT NOT NULL, date DATE NOT NULL, PRIMARY KEY(id))');
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE counter_id_seq CASCADE');
         $this->addSql('DROP TABLE counter');

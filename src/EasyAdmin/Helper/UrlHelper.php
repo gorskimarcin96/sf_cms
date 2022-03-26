@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EasyAdmin;
+namespace App\EasyAdmin\Helper;
 
 use App\Entity\TodoList;
 use App\Entity\TodoTask;

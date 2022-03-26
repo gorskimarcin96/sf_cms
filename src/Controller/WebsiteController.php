@@ -33,10 +33,10 @@ class WebsiteController extends AbstractController
         RealizationRepository $realizationRepository
     ): Response {
         return $this->render('website/homepage.html.twig', [
-            'sliders'      => $sliderRepository->findByLocale($request->getLocale()),
-            'articles'     => $articleRepository->findByLocale($request->getLocale()),
-            'offers'       => $offerRepository->findByLocale($request->getLocale()),
-            'realizations' => $realizationRepository->findAllOrderByCreatedAtDesc(),
+            'sliders'      => $sliderRepository->findAll(),
+            'articles'     => $articleRepository->findAll(),
+            'offers'       => $offerRepository->findAll(),
+            'realizations' => $realizationRepository->findAll(),
         ]);
     }
 

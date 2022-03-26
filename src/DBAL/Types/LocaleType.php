@@ -9,7 +9,7 @@ final class LocaleType extends AbstractEnumType
     public const POLISH = 'pl';
     public const ENGLISH = 'en';
 
-    protected static $choices = [
+    protected static array $choices = [
         self::POLISH => 'Polish',
         self::ENGLISH => 'English',
     ];

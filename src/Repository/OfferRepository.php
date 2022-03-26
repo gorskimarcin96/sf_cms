@@ -18,9 +18,4 @@ class OfferRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Offer::class);
     }
-
-    public function findByLocale(string $locale): array
-    {
-        return $this->findBy(['locale' => $locale]);
-    }
 }
