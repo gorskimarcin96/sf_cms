@@ -18,9 +18,4 @@ class SliderRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Slider::class);
     }
-
-    public function findByLocale(string $locale): array
-    {
-        return $this->findBy(['locale' => $locale]);
-    }
 }

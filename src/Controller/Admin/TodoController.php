@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\EasyAdmin\UrlHelper;
+use App\EasyAdmin\Helper\UrlHelper;
 use App\Entity\TodoList;
 use App\Entity\TodoTask;
 use App\Form\TodoListType;

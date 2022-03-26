@@ -2,15 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use App\DBAL\Types\LocaleType;
+use App\EasyAdmin\Field\TranslationField;
 use App\Entity\Article;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ArticleCrudController extends AbstractCrudController
 {
@@ -26,10 +26,18 @@ class ArticleCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield TextField::new('title');
-        yield TextEditorField::new('description');
-        yield ChoiceField::new('locale')->setChoices(LocaleType::getChoices());
-        yield ImageField::new('fileFn')->setUploadDir(Article::getUploadDir())->setBasePath(Article::getBasePath());
+        yield TextField::new('title')->onlyOnIndex();
+        yield TranslationField::new('translations', 'Translations', [
+            'title' => [
+                'field_type' => TextType::class,
+                'label'      => 'Title',
+            ],
+            'description' => [
+                'field_type' => TextareaType::class,
+                'label'      => 'Description',
+            ],
+        ])->hideOnIndex();
+        yield ImageField::new('fileFn')->setUploadDir(Article::getUploadDir())->setBasePath(Article::getBasePath())->setRequired(false);
         yield AssociationField::new('user')->hideOnForm();
         yield DateTimeField::new('createdAt')->hideOnForm();
         yield DateTimeField::new('updatedAt')->hideOnForm();

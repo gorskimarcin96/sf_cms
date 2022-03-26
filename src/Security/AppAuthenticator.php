@@ -2,7 +2,7 @@
 
 namespace App\Security;
 
-use App\EasyAdmin\UrlHelper;
+use App\EasyAdmin\Helper\UrlHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

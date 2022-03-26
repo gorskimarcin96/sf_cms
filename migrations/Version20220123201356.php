@@ -14,7 +14,7 @@ final class Version20220123201356 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create todo tables.';
+        return 'Created todo tables.';
     }
 
     public function up(Schema $schema): void

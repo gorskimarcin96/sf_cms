@@ -14,12 +14,11 @@ final class Version20210819173247 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create slider table';
+        return 'Created slider table.';
     }
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE slider_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE slider (id INT NOT NULL, user_id INT NOT NULL, title VARCHAR(255) NOT NULL, locale VARCHAR(255) CHECK(locale IN (\'pl\', \'en\')) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, file_fn VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_CFC71007A76ED395 ON slider (user_id)');
@@ -33,7 +32,6 @@ final class Version20210819173247 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE slider_id_seq CASCADE');
         $this->addSql('DROP TABLE slider');

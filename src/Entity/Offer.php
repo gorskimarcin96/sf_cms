@@ -2,19 +2,19 @@
 
 namespace App\Entity;
 
-use App\DBAL\Types\LocaleType;
-use App\Entity\Traits\TimeStampableTrait;
-use App\Repository\OfferRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
+use App\Entity\Traits\TimeStampableTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
 /**
- * @ORM\Entity(repositoryClass=OfferRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\OfferRepository")
  * @ORM\Cache("NONSTRICT_READ_WRITE")
  * @ORM\HasLifecycleCallbacks()
  */
-class Offer
+class Offer implements TranslatableInterface
 {
+    use TranslatableTrait;
     use TimeStampableTrait;
 
     /**
@@ -23,17 +23,6 @@ class Offer
      * @ORM\Column(type="integer")
      */
     private ?int $id = null;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $title;
-
-    /**
-     * @ORM\Column(type="string", type="LocaleType", length=2)
-     * @DoctrineAssert\Enum(entity=LocaleType::class)
-     */
-    private string $locale;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="offers")
@@ -48,26 +37,7 @@ class Offer
 
     public function getTitle(): string
     {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    public function setLocale(string $locale): self
-    {
-        $this->locale = $locale;
-
-        return $this;
+        return $this->translate($this->defaultLocale)?->getTitle();
     }
 
     public function getUser(): User

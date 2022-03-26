@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\EasyAdmin\UrlHelper;
+use App\EasyAdmin\Helper\UrlHelper;
 use App\Entity\Article;
 use App\Entity\Constant;
 use App\Entity\MessengerMessages;
@@ -14,6 +14,7 @@ use App\File\FileManager;
 use App\File\LogReader;
 use App\Form\CVType;
 use App\Repository\ConstantRepository;
+use App\String\Traits\NamespaceHelperTrait;
 use App\WebFeatures\Backend\PdfManager;
 use App\WebFeatures\Both\Counter\CounterChart;
 use App\WebFeatures\Both\Counter\CounterStatistic;
@@ -31,6 +32,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    use NamespaceHelperTrait;
+
     public function __construct(
         private CounterStatistic   $counterStatistic,
         private CounterChart       $counterChart,
@@ -152,14 +155,14 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToUrl('Homepage', 'fa fa-home', $this->generateUrl('homepage'));
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-desktop')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToRoute('Todo', 'fas fa-clipboard-list', 'easyadmin_todolist_index');
-        yield MenuItem::linkToCrud(Article::class, 'fas fa-list', Article::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud(Offer::class, 'fas fa-newspaper', Offer::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud(Slider::class, 'fas fa-address-card', Slider::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud(Realization::class, 'fas fa-image', Realization::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud(Task::class, 'fas fa-tasks', Task::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud(CronJob::class, 'fa fa-list-alt', CronJob::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud(CronReport::class, 'fa fa-scroll', CronReport::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud(MessengerMessages::class, 'fas fa-train', MessengerMessages::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Article::class), 'fas fa-list', Article::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Offer::class), 'fas fa-newspaper', Offer::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Slider::class), 'fas fa-address-card', Slider::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Realization::class), 'fas fa-image', Realization::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Task::class), 'fas fa-tasks', Task::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(CronJob::class), 'fa fa-list-alt', CronJob::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(CronReport::class), 'fa fa-scroll', CronReport::class)->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(MessengerMessages::class), 'fas fa-train', MessengerMessages::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToUrl('Logs', 'fas fa-toilet-paper', $this->generateUrl('easyadmin_logs'))->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'))->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'))->setPermission('ROLE_ADMIN');
