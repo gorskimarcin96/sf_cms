@@ -12,7 +12,6 @@ use App\Repository\DogJokeRepository;
 use App\Repository\PositionRepository;
 use App\String\CssManager;
 use App\String\Traits\TimeToPolishStringTrait;
-use DateInterval;
 use DateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Email;
@@ -27,46 +26,57 @@ class ApeliniaMail extends AbstractMailCreator
     private const WEDDING_TIME = '2023-09-02 13:00';
 
     public function __construct(
-        Environment                $twig,
-        private FileManager        $fileManager,
-        private Kwejk              $kwejk,
-        private Demotywatory       $demotywatory,
-        private Biblijni           $biblijni,
-        private CytatyInfo         $cytatyInfo,
+        Environment $twig,
+        private FileManager $fileManager,
+        private Kwejk $kwejk,
+        private Demotywatory $demotywatory,
+        private Biblijni $biblijni,
+        private CytatyInfo $cytatyInfo,
         private PositionRepository $positionRepository,
-        private DogJokeRepository  $dogJokeRepository,
-        private CssManager         $cssManager,
-        private RouterInterface    $router
+        private DogJokeRepository $dogJokeRepository,
+        private CssManager $cssManager,
+        private RouterInterface $router
     ) {
         $this->router->getContext()->setBaseUrl('https://mgorski.dev');
 
-        parent::__construct(new MailBuilder(), new TemplatedEmail(), $fileManager, $twig);
+        parent::__construct(
+            new MailBuilder(),
+            new TemplatedEmail(),
+            $fileManager,
+            $twig
+        );
     }
 
     public function create(): TemplatedEmail
     {
         $now = DateTime::createFromFormat('U', time());
-        $style = 'style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;"';
+        $defaultStyle
+            = 'style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;"';
+        $imageStyle = 'style="opacity: 0.9;max-width:99%;"';
         $this->templatedEmail
             ->priority(Email::PRIORITY_HIGH)
-            ->subject('Love letter ' . $now->format('Y-m-d'));
+            ->subject('Love letter '.$now->format('Y-m-d'));
 
         $this->clearElements();
-        $this->setLayout('
-            <div style="width: 700px;' . $this->cssManager->randGradient() . '">
+        $this->setLayout(
+            '
+            <div style="width: 700px;'.$this->cssManager->randGradient().'">
                 <div style="width: 700px;margin-top: 20px;">{{ body }}</div>
             </div>
-        ');
+        '
+        );
 
-        $this->append('
+        $this->append(
+            '
             <br>
             <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;">
                 <h1>❤💋❤ Love letter ❤💋❤</h1>
                 <p>Jesteśmy razem {{ firstTimeFormat }}! Ten wyjątkowy i niepowtarzalny dzień chce szczególnie uczcić!</p>
                 <p>{{ weddingTime > "now" ? "Do ślubu zostało" : "Jesteśmy po ślubie" }} {{ weddingTimeFormat }}.</p>
             </div>
-        ', [
-                'style'             => $style,
+        ',
+            [
+                'style'             => $defaultStyle,
                 'firstTimeFormat'   => $this->getApeliniaFirstTime(),
                 'weddingTime'       => new DateTime(self::WEDDING_TIME),
                 'weddingTimeFormat' => $this->getApeliniaWeddingTime(),
@@ -76,78 +86,138 @@ class ApeliniaMail extends AbstractMailCreator
         if ($now->format('N') === "6") {
             $fileName = 'pozycja.png';
             if (null !== ($position = $this->positionRepository->randOne())) {
-                $this->fileManager->saveFile($position->getImage(), $fileName, true);
-                $this->append('
-                    <div {{ style|raw }}>
+                $this->fileManager->saveFile(
+                    $position->getImage(),
+                    $fileName,
+                    true
+                );
+                $this->append(
+                    '
+                    <div {{ defaultStyle|raw }}>
                         <h2>Pozycja tygodnia:</h2>
                         <h3>{{ position.title }}</h3>
                         <div style="text-align: center">
-                            <img src="cid:pozycja.png" style="opacity: 0.9;" alt="pozycja">
+                            <img src="cid:pozycja.png" {{ imageStyle|raw }} alt="pozycja">
                         </div>
                         <div><b>{{ position.firstSection|raw }}</b></div>
                         <div>{{ position.secondSection|raw }}</div>
                         <div style="text-align: center"><i>🔥🔥🔥 Czyli co byśmy dzisiaj robili, gdybyśmy już byli po ślubie 🔥🔥🔥</i></div>
                     </div>
-                ', ['style' => $style, 'position' => $position], [$fileName]);
+                ',
+                    [
+                    'defaultStyle' => $defaultStyle,
+                    'imageStyle'   => $imageStyle,
+                    'position'     => $position,
+                ],
+                    [$fileName]
+                );
             }
         } elseif ($now->format('N') === "7") {
-            $this->append('
-            <div {{ style|raw }}>
+            $this->append(
+                '
+            <div {{ defaultStyle|raw }}>
                 <h2>Cytat z bibli:</h2>
                 <div>{{ bible_quote|raw }}</div>
             </div>
-        ', ['style' => $style, 'bible_quote' => $this->biblijni->getRandQuote()]);
+        ',
+                [
+                    'defaultStyle' => $defaultStyle,
+                    'bible_quote'  => $this->biblijni->getRandQuote(),
+                ]
+            );
+        } else {
+            $fileName = 'dog_joke.jpg';
+            if ((null !== $dogJoke = $this->dogJokeRepository->randOne())) {
+                $this->fileManager->saveFile(
+                    $dogJoke->getImage(),
+                    $fileName,
+                    true
+                );
+                $this->append(
+                    '
+                <div {{ defaultStyle|raw }}>
+                    <h2>Psie sucharki:</h2>
+                    <div style="text-align: center">
+                        <img src="cid:dog_joke.jpg" {{ imageStyle|raw }} alt="dog_joke">
+                    </div>
+                </div>
+            ',
+                    [
+                        'defaultStyle' => $defaultStyle,
+                        'imageStyle'   => $imageStyle,
+                    ],
+                    [$fileName]
+                );
+            }
         }
 
         $fileName = 'demotywator.jpg';
-        $this->fileManager->saveFile(file_get_contents($this->demotywatory->getLinkToRandMem()), $fileName, true);
-        $this->append('
-             <div {{ style|raw }}>
+        $this->fileManager->saveFile(
+            file_get_contents($this->demotywatory->getLinkToRandMem()),
+            $fileName,
+            true
+        );
+        $this->append(
+            '
+             <div {{ defaultStyle|raw }}>
                 <h2>Motywator:</h2>
                 <div style="text-align: center">
                     <img src="cid:demotywator.jpg" style="opacity: 0.9;" alt="demotywator">
                 </div>
             </div>
-        ', ['style' => $style], [$fileName]);
+        ',
+            ['defaultStyle' => $defaultStyle],
+            [$fileName]
+        );
 
-        $this->append('
-            <div {{ style|raw }}>
+        $this->append(
+            '
+            <div {{ defaultStyle|raw }}>
                 <h2>Cytat życia dnia:</h2>
                 <div>{{ life_quote|raw }}</div>
             </div>
-        ', ['style' => $style, 'life_quote' => $this->cytatyInfo->getRandQuote()]);
+        ',
+            [
+                'defaultStyle' => $defaultStyle,
+                'life_quote'   => $this->cytatyInfo->getRandQuote(),
+            ]
+        );
 
         $fileName = 'kwejk.jpg';
-        $this->fileManager->saveFile(file_get_contents($this->kwejk->getLinkToRandMem()), $fileName, true);
-        $this->append('
-            <div {{ style|raw }}>
+        $this->fileManager->saveFile(
+            file_get_contents($this->kwejk->getLinkToRandMem()),
+            $fileName,
+            true
+        );
+        $this->append(
+            '
+            <div {{ defaultStyle|raw }}>
                 <h2>Na wesoło:</h2>
                 <div style="text-align: center">
                     <img src="cid:kwejk.jpg" style="opacity: 0.9;" alt="kwejk">
                 </div>
             </div>
-        ', ['style' => $style], [$fileName]);
+        ',
+            ['defaultStyle' => $defaultStyle],
+            [$fileName]
+        );
 
-        $fileName = 'dog_joke.jpg';
-        if ((null !== $dogJoke = $this->dogJokeRepository->randOne())) {
-            $this->fileManager->saveFile($dogJoke->getImage(), $fileName, true);
-            $this->append('
-                <div {{ style|raw }}>
-                    <h2>Psie sucharki:</h2>
-                    <div style="text-align: center">
-                        <img src="cid:dog_joke.jpg" style="opacity: 0.9;" alt="dog_joke">
-                    </div>
-                </div>
-            ', ['style' => $style], [$fileName]);
-        }
-
-        $this->append('
+        $this->append(
+            '
             <div style="background: rgba(255,255,255, 0.3);border-radius: 10px; margin: 10px; padding: 10px;height:110px;">
                 Korospodencja Odik! Kliknij w ten <a href="{{ unsubscribe_url }}">link</a>, aby wypisać się z newslettera.
                 <img src="cid:Odi.png" style="display: block; float: right; width: 120px;" alt="Odi">
             </div>
             <br>
-        ', ['unsubscribe_url' => $this->router->generate('feature not implemented', ['_locale' => LocaleType::POLISH])], ['Odi.png']);
+        ',
+            [
+            'unsubscribe_url' => $this->router->generate(
+                'feature not implemented',
+                ['_locale' => LocaleType::POLISH]
+            ),
+        ],
+            ['Odi.png']
+        );
 
         return $this->templatedEmail->html($this->mailBuilder->renderHtml());
     }

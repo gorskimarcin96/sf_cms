@@ -2,52 +2,55 @@
 
 namespace App\Crawler\Facebook;
 
+use App\Crawler\Facebook\Exception\ImageNotFoundException;
+use App\DBAL\Types\LocaleType;
 use Facebook\WebDriver\Exception\StaleElementReferenceException;
-use Facebook\WebDriver\Exception\TimeoutException;
-use Facebook\WebDriver\Exception\WebDriverCurlException;
-use Facebook\WebDriver\Exception\WebDriverException;
-use Symfony\Component\Panther\Client;
+use Facebook\WebDriver\WebDriver;
 
-class DogJokes
+class DogJokes extends Facebook
 {
     public const DOG_JOKES_URL = 'https://www.facebook.com/psiesucharki/photos/a.808522252533944/808522172533952';
     public const IMG_ELEMENT = 'img[data-visualcompletion="media-vc-image"]';
-    public const JAVASCRIPT_CLICK_PREV = "document.querySelectorAll('div[aria-label=\"Previous photo\"]')[0].click()";
-
-    public function __construct(private string $seleniumUrl)
-    {
-    }
+    public const JAVASCRIPT_CLICK_PREV = [
+        LocaleType::ENGLISH => "document.querySelectorAll('div[aria-label=\"Previous photo\"]')[0].click()",
+        LocaleType::POLISH  => "document.querySelectorAll('div[aria-label=\"Poprzednie zdjęcie\"]')[0].click()",
+    ];
 
     /**
-     * @throws TimeoutException
-     * @throws WebDriverException
-     * @throws WebDriverCurlException
-     * @throws StaleElementReferenceException
+     * @throws ImageNotFoundException
+     * @throws LoginIsRequiredException
      */
     public function getAll(?string $url = null): iterable
     {
-        $url = $url ?? self::DOG_JOKES_URL;
-        $actualUrl = null;
-        $customSeleniumClient = Client::createSeleniumClient($this->seleniumUrl);
-        $customSeleniumClient->request('GET', $url);
-        $customSeleniumClient->waitFor(self::IMG_ELEMENT);
-
-        while ($url !== $actualUrl) {
-            $customSeleniumClient->executeScript(self::JAVASCRIPT_CLICK_PREV);
-            $customSeleniumClient->waitFor(self::IMG_ELEMENT);
-            $actualUrl = $customSeleniumClient->getCurrentURL();
-
-            yield $this->toArray($customSeleniumClient);
+        if (!$this->clientIsExists() || !$this->isLogged()) {
+            throw new LoginIsRequiredException();
         }
 
-        $customSeleniumClient->close();
+        $url = $url ?? self::DOG_JOKES_URL;
+        $actualUrl = null;
+        $this->client->request('GET', $url);
+        $this->client->waitFor(self::IMG_ELEMENT);
+
+        while ($url !== $actualUrl) {
+            $this->client->executeScript(self::JAVASCRIPT_CLICK_PREV[$this->getLocale()]);
+            $this->client->waitFor(self::IMG_ELEMENT);
+            $actualUrl = $this->client->getCurrentURL();
+            $this->messengerLogger->notice('Get image from: ' . $actualUrl);
+
+            yield $this->toArray($this->client);
+        }
     }
 
-    private function toArray(Client $customSeleniumClient): array
+    /** @throws ImageNotFoundException */
+    private function toArray(WebDriver $webDriver): array
     {
-        return [
-            'url'   => $customSeleniumClient->getCurrentURL(),
-            'image' => $customSeleniumClient->getCrawler()->filter(self::IMG_ELEMENT)->images()[0]->getUri(),
-        ];
+        try {
+            return [
+                'url'   => $webDriver->getCurrentURL(),
+                'image' => $webDriver->getCrawler()->filter(self::IMG_ELEMENT)->images()[0]->getUri(),
+            ];
+        } catch (StaleElementReferenceException $exception) {
+            throw new ImageNotFoundException();
+        }
     }
 }

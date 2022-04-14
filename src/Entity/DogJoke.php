@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Entity\Traits\TimeStampableTrait;
 use App\Repository\DogJokeRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=DogJokeRepository::class)
@@ -61,7 +60,7 @@ class DogJoke
 
     public function getImage(): ?string
     {
-        return $this->image;
+        return base64_decode($this->image);
     }
 
     public function setImage(string $image): self
