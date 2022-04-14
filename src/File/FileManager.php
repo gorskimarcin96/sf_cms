@@ -8,17 +8,6 @@ class FileManager
     {
     }
 
-    public function getPathLogs(): array
-    {
-        $logDir = $this->projectDir . '/var/log';
-
-        foreach (array_diff(scandir($logDir), ['.', '..']) as $fileName) {
-            $files[] = $logDir . '/' . $fileName;
-        }
-
-        return $files ?? [];
-    }
-
     public function saveFile(string $file, ?string $name = null, bool $isPrivateDir = false)
     {
         file_put_contents($this->getDir($isPrivateDir) . ($name ?: (time() . '.jpg')), $file);

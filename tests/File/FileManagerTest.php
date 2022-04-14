@@ -34,11 +34,6 @@ class FileManagerTest extends TestCase
         }
     }
 
-    public function testGetPathLogs(): void
-    {
-        $this->assertSame(['/var/www/html/tests/File/var/log/test.log'], $this->fileManager->getPathLogs());
-    }
-
     public function testSaveFile(): void
     {
         $this->fileManager->saveFile('http://localhost/build/img/mgorski.png', 'mgorski.png',);

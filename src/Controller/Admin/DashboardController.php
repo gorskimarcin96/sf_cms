@@ -58,39 +58,8 @@ class DashboardController extends AbstractDashboardController
         ]);
     }
 
-    #[Route('/admin/logs', name: 'easyadmin_logs', methods: ['GET', 'POST'])]
-    public function logs(): Response
-    {
-        $files = $this->fileManager->getPathLogs();
-
-        if ($this->requestStack->getCurrentRequest()->getMethod() === 'POST') {
-            $formData = $this->requestStack->getCurrentRequest()->get('form');
-            $from = $formData['from'] !== '' ? $formData['from'] - 1 : null;
-            $to = $formData['to'] !== '' ? $formData['to'] - 1 : null;
-            $logReader = new LogReader($formData['file']);
-            $lines = $logReader->readLogs($from, $to);
-        }
-
-        return $this->render('easyadmin/logs.html.twig', [
-            'startLineNumber' => isset($logReader) ? $logReader->getStartLine() : 0,
-            'lines'           => $lines ?? null,
-            'files'           => $this->prepareSelectInput($files),
-            'formData'        => $formData ?? [],
-        ]);
-    }
-
-    private function prepareSelectInput(array $files): array
-    {
-        foreach ($files as $file) {
-            $explode = explode('/', $file);
-            $data[$file] = end($explode) . ' (lines ' . (new LogReader($file))->getCountLines() . ')';
-        }
-
-        return $data ?? [];
-    }
-
     #[Route('/admin/cv', name: 'easyadmin_cv', methods: 'GET')]
-    public function cv(): Response
+    public function cvIndex(): Response
     {
         $form = $this->createForm(CVType::class, null, [
             'cv' => $this->constantRepository->findCV()->getDescription(),
@@ -104,7 +73,7 @@ class DashboardController extends AbstractDashboardController
     }
 
     #[Route('/admin/cv/save/{preview}', name: 'easyadmin_cv_preview', methods: 'POST')]
-    public function prev(Request $request, string $preview): JsonResponse
+    public function cvPrev(Request $request, string $preview): JsonResponse
     {
         $response['success'] = false;
 
@@ -128,7 +97,7 @@ class DashboardController extends AbstractDashboardController
     }
 
     #[Route('/admin/cv/revert', name: 'easyadmin_cv_revert', methods: 'GET')]
-    public function revert(): JsonResponse
+    public function cvRevert(): JsonResponse
     {
         return new JsonResponse([
             'success' => true,
@@ -144,9 +113,7 @@ class DashboardController extends AbstractDashboardController
         $phpInfo = ob_get_contents();
         ob_get_clean();
 
-        return $this->render('easyadmin/content.html.twig', [
-            'data' => $phpInfo,
-        ]);
+        return $this->render('easyadmin/content.html.twig', ['data' => $phpInfo]);
     }
 
     public function configureMenuItems(): iterable
@@ -163,7 +130,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(CronJob::class), 'fa fa-list-alt', CronJob::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(CronReport::class), 'fa fa-scroll', CronReport::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(MessengerMessages::class), 'fas fa-train', MessengerMessages::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToUrl('Logs', 'fas fa-toilet-paper', $this->generateUrl('easyadmin_logs'))->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'))->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'))->setPermission('ROLE_ADMIN');
     }
