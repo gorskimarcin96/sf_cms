@@ -12,7 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Position|null findOneBy(array $criteria, array $orderBy = null)
  * @method Position[]    findAll()
  * @method Position[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method Position|null randOne(string $primaryKey)
+ * @method Position|null randOne()
+ * @method int[]         getIds(string $primaryKey = 'id')
  */
 class PositionRepository extends ServiceEntityRepository
 {

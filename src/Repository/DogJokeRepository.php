@@ -12,7 +12,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method DogJoke|null findOneBy(array $criteria, array $orderBy = null)
  * @method DogJoke[]    findAll()
  * @method DogJoke[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method DogJoke|null randOne(string $primaryKey)
+ * @method DogJoke|null randOne()
+ * @method int[]        getIds(string $primaryKey = 'id')
  */
 class DogJokeRepository extends ServiceEntityRepository
 {

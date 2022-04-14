@@ -3,16 +3,16 @@
 namespace App\Command;
 
 use App\Crawler\Facebook\DogJokes;
+use App\Crawler\Facebook\Exception\ImageNotFoundException;
+use App\DBAL\Types\LocaleType;
 use App\Entity\DogJoke;
 use App\Repository\DogJokeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Facebook\WebDriver\Exception\StaleElementReferenceException;
-use Facebook\WebDriver\Exception\TimeoutException;
-use Facebook\WebDriver\Exception\WebDriverCurlException;
-use Facebook\WebDriver\Exception\WebDriverException;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -23,7 +23,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class SaveDogJokesCommand extends Command
 {
-    private const SLEEP = 10;
+    private const SLEEP_IMAGE_NOT_FOUND = 5;
+    private const SLEEP_OTHER_EXCEPTION = 10;
     private const ERROR_LIMIT = 5;
     private int $i = 0;
     private int $errorNumber = 0;
@@ -37,10 +38,26 @@ class SaveDogJokesCommand extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this
+            ->addArgument('login', InputArgument::REQUIRED, 'Login to facebook.')
+            ->addArgument('password', InputArgument::REQUIRED, 'Password to facebook.')
+            ->addArgument('locale', InputArgument::OPTIONAL, 'Country code to your profile.', LocaleType::ENGLISH);
+    }
+
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $this->progressBar = new ProgressBar($output);
+
+        $this->dogJokes->createClient();
+        $this->dogJokes->login(
+            $input->getArgument('login'),
+            $input->getArgument('password')
+        );
+        $this->dogJokes->setLocale($input->getArgument('locale'));
 
         $io->note('Waiting to download data.');
         $this->progressBar->start();
@@ -57,34 +74,13 @@ class SaveDogJokesCommand extends Command
     {
         try {
             $this->save();
-        } catch (StaleElementReferenceException|WebDriverCurlException|WebDriverException|TimeoutException $exception) {
-            $this->errorNumber++;
-            $io->newLine(2);
-            $io->note(sprintf('Catch %s exception.', $exception::class));
-
-            if ($this->errorNumber <= self::ERROR_LIMIT) {
-                $io->note(sprintf('Timeout %s seconds.', self::SLEEP));
-
-                $progressBarSleep = new ProgressBar($output, self::SLEEP);
-                $progressBarSleep->start();
-                for ($i = 0; $i < self::SLEEP; $i++) {
-                    $progressBarSleep->advance();
-                    sleep(1);
-                }
-                $progressBarSleep->finish();
-                $this->saveAll($io, $output);
-            } else {
-                $io->error('Too many errors.');
-            }
+        } catch (ImageNotFoundException $exception) {
+            $this->exceptionHandling($exception, $io, $output, self::SLEEP_IMAGE_NOT_FOUND, false);
+        } catch (Exception $exception) {
+            $this->exceptionHandling($exception, $io, $output, self::SLEEP_OTHER_EXCEPTION);
         }
     }
 
-    /**
-     * @throws TimeoutException
-     * @throws WebDriverException
-     * @throws WebDriverCurlException
-     * @throws StaleElementReferenceException
-     */
     private function save(): void
     {
         $lastDogJoke = $this->dogJokeRepository->findLast();
@@ -106,6 +102,31 @@ class SaveDogJokesCommand extends Command
             $this->entityManager->flush();
             $this->progressBar->advance();
             $this->i++;
+        }
+    }
+
+    private function exceptionHandling(Exception $exception, SymfonyStyle $io, OutputInterface $output, int $timeout, bool $incrementErrors = true): void
+    {
+        if ($incrementErrors) {
+            $this->errorNumber++;
+        }
+
+        $io->newLine(2);
+        $io->note(sprintf('Catch %s exception.', $exception::class));
+
+        if ($this->errorNumber <= self::ERROR_LIMIT) {
+            $io->note(sprintf('Timeout %s seconds.', $timeout));
+
+            $progressBarSleep = new ProgressBar($output, $timeout);
+            $progressBarSleep->start();
+            for ($i = 0; $i < $timeout; $i++) {
+                $progressBarSleep->advance();
+                sleep(1);
+            }
+            $progressBarSleep->finish();
+            $this->saveAll($io, $output);
+        } else {
+            $io->error('Too many errors.');
         }
     }
 }
