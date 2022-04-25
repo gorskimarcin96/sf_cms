@@ -40,6 +40,17 @@ class FileManagerTest extends TestCase
         $this->assertFileExists(__DIR__ . '/public/mgorski.png');
     }
 
+    public function testGetPath(): void
+    {
+        $this->assertSame(
+            '/var/www/html/tests/File/private/test.img',
+            $this->fileManager->getPath('test.img', true)
+        );
+        $this->assertSame(
+            '/var/www/html/tests/File/public/test.img',
+            $this->fileManager->getPath('test.img', false)
+        );
+    }
 
     public function testOpenFilePrivate(): void
     {

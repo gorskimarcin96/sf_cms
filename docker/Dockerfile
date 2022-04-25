@@ -19,7 +19,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       libpq-dev \
       wget \
       librabbitmq-dev \
-    && pecl install amqp-1.11.0beta \
+      libmagickwand-dev --no-install-recommends \
+      ghostscript \
+      imagemagick \
+    && pecl install amqp-1.11.0beta imagick \
     && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
     && docker-php-ext-configure intl \
     && docker-php-ext-install \
@@ -33,7 +36,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       soap \
       zip \
       gd  \
-    && docker-php-ext-enable amqp \
+    && docker-php-ext-enable amqp imagick \
     && rm -rf /tmp/* \
     && rm -rf /var/list/apt/* \
     && rm -rf /var/lib/apt/lists/* \

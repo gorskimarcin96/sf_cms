@@ -7,7 +7,7 @@ class MailBuilder
     private string $layout = '{{ body }}';
     private array $elements = [];
 
-    public function clearElements()
+    public function clearElements(): void
     {
         $this->elements = [];
     }

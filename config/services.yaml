@@ -33,9 +33,6 @@ services:
     App\File\LogReader:
         autowire: false
 
-#    App\Utils\File\FileManager:
-#        public: true
-
     App\Mailer\MailerWrongTypeException:
         autowire: false
 
@@ -43,4 +40,7 @@ services:
         autowire: false
 
     App\Mailer\AbstractMailCreator:
+        autowire: false
+
+    App\Image\Image:
         autowire: false

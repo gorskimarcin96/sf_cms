@@ -15,7 +15,7 @@ class CounterChartTest extends KernelTestCase
     private CounterChart $counterChart;
     private DateTimeManager $dateTimeManager;
 
-    #[NoReturn] protected function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         static::bootKernel();
