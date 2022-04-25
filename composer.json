@@ -8,6 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-openssl": "*",
+        "ext-imagick": "*",
         "a2lix/translation-form-bundle": "^3.2",
         "cron/cron-bundle": "^2.6",
         "doctrine/annotations": "^1.13",

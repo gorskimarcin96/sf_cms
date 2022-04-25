@@ -9,7 +9,7 @@ class CounterStatisticTest extends KernelTestCase
 {
     private CounterStatistic $counterStatistic;
 
-    #[NoReturn] protected function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         static::bootKernel();

@@ -6,7 +6,6 @@ use App\Faker\Invoker;
 use App\Repository\CounterRepository;
 use App\WebFeatures\Both\Counter\CounterManager;
 use DateTime;
-use JetBrains\PhpStorm\NoReturn;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CounterManagerTest extends KernelTestCase
@@ -17,7 +16,7 @@ class CounterManagerTest extends KernelTestCase
     private CounterRepository $counterRepository;
     private string $today;
 
-    #[NoReturn] protected function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         static::bootKernel();
