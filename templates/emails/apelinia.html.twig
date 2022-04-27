@@ -1,0 +1,8 @@
+<div style="width: 700px; {{ gradient }}">
+    <div style="width: 700px;margin-top: 20px;">
+        <br>
+        {% for section in sections %}
+            {{ section.render|raw }}<br>
+        {% endfor %}
+    </div>
+</div>
