@@ -7,8 +7,8 @@
         "php": ">=8",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-openssl": "*",
         "ext-imagick": "*",
+        "ext-openssl": "*",
         "a2lix/translation-form-bundle": "^3.2",
         "cron/cron-bundle": "^2.6",
         "doctrine/annotations": "^1.13",
@@ -36,6 +36,7 @@
         "symfony/translation": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
         "symfony/ux-chartjs": "^1.3",
+        "symfony/webpack-encore-bundle": "^1.14",
         "symfony/yaml": "5.4.*"
     },
     "require-dev": {
@@ -50,8 +51,7 @@
         "symfony/maker-bundle": "^1.32",
         "symfony/phpunit-bridge": "^5.3",
         "symfony/stopwatch": "^5.3",
-        "symfony/web-profiler-bundle": "^5.3",
-        "symfony/webpack-encore-bundle": "^1.12"
+        "symfony/web-profiler-bundle": "^5.3"
     },
     "config": {
         "optimize-autoloader": true,
