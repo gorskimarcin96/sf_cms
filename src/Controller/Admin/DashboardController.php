@@ -14,20 +14,22 @@ use App\File\FileManager;
 use App\File\LogReader;
 use App\Form\CVType;
 use App\Repository\ConstantRepository;
+use App\Shell\Process;
 use App\String\Traits\NamespaceHelperTrait;
 use App\WebFeatures\Backend\PdfManager;
 use App\WebFeatures\Both\Counter\CounterChart;
 use App\WebFeatures\Both\Counter\CounterStatistic;
-use Cron\CronBundle\Entity\CronJob;
-use Cron\CronBundle\Entity\CronReport;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Exception;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
@@ -41,7 +43,8 @@ class DashboardController extends AbstractDashboardController
         private PdfManager         $pdfManager,
         private FileManager        $fileManager,
         private RequestStack       $requestStack,
-        private UrlHelper $url
+        private UrlHelper          $url,
+        private Process            $process
     ) {
     }
 
@@ -55,6 +58,7 @@ class DashboardController extends AbstractDashboardController
         return $this->render('easyadmin/dashboard.html.twig', [
             'charts'       => $this->counterChart->get(),
             'statics_data' => $this->counterStatistic->get(),
+            'processes'    => $this->process->finds(),
         ]);
     }
 
@@ -127,8 +131,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(Slider::class), 'fas fa-address-card', Slider::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(Realization::class), 'fas fa-image', Realization::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(Task::class), 'fas fa-tasks', Task::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(CronJob::class), 'fa fa-list-alt', CronJob::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(CronReport::class), 'fa fa-scroll', CronReport::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(MessengerMessages::class), 'fas fa-train', MessengerMessages::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'))->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'))->setPermission('ROLE_ADMIN');
