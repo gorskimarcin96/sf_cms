@@ -1,15 +1,15 @@
 docker-compose up -d
-docker-compose exec app-web composer install -n
-docker-compose exec app-web composer update
-docker-compose exec app-web ./bin/console cache:clear
-#docker-compose exec app-web ./bin/console doctrine:schema:drop --full-database --force
-docker-compose exec app-web ./bin/console doctrine:schema:drop --full-database --force --env=test
-docker-compose exec app-web ./bin/console doctrine:database:create --if-not-exists
-docker-compose exec app-web ./bin/console doctrine:database:create --if-not-exists --env=test
-docker-compose exec app-web ./bin/console doctrine:migrations:migrate -n
-docker-compose exec app-web ./bin/console doctrine:migrations:migrate -n --env=test
-docker-compose exec app-web php -d memory_limit=4G vendor/bin/php-cs-fixer fix src
-docker-compose exec app-web php -d memory_limit=4G vendor/bin/phpstan analyze src
-docker-compose exec app-web php -d memory_limit=4G vendor/bin/phpstan analyze tests
-docker-compose exec app-web php -d memory_limit=4G ./bin/phpunit
-docker-compose exec app-web bin/console app:save-dog-jokes
+docker-compose exec php composer install -n
+docker-compose exec php composer update
+docker-compose exec php ./bin/console cache:clear
+#docker-compose exec php ./bin/console doctrine:schema:drop --full-database --force
+docker-compose exec php ./bin/console doctrine:schema:drop --full-database --force --env=test
+docker-compose exec php ./bin/console doctrine:database:create --if-not-exists
+docker-compose exec php ./bin/console doctrine:database:create --if-not-exists --env=test
+docker-compose exec php ./bin/console doctrine:migrations:migrate -n
+docker-compose exec php ./bin/console doctrine:migrations:migrate -n --env=test
+docker-compose exec php php -d memory_limit=4G vendor/bin/php-cs-fixer fix src
+docker-compose exec php php -d memory_limit=4G vendor/bin/phpstan analyze src
+docker-compose exec php php -d memory_limit=4G vendor/bin/phpstan analyze tests
+docker-compose exec php php -d memory_limit=4G ./bin/phpunit
+#docker-compose exec php bin/console app:save-dog-jokes

@@ -1,12 +1,10 @@
 version: "3.7"
 
 services:
-  app-web:
+  php:
     image: ${APP_NAME}
     build:
       context: ./docker
-    container_name: "${APP_NAME}-web"
-    restart: always
     ports:
       - "127.0.0.1:80:80"
     volumes:
@@ -15,36 +13,14 @@ services:
       - ./docker/config/php/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./docker/config/vhosts:/etc/apache2/sites-enabled
       - ./docker/config/dir/dir.conf:/etc/apache2/mods-enabled/dir.conf
-      - ./docker/logs/apache2:/var/log/apache2
-    networks:
-      - app-network
-  app-cron:
-    image: ${APP_NAME}
-    container_name: "${APP_NAME}-cron"
-    restart: always
-    entrypoint: ./docker/sh/cron_run.sh
-    volumes:
-      - ./:/var/www/html
-    networks:
-      - app-network
-  app-messenger-consume:
-    image: ${APP_NAME}
-    container_name: "${APP_NAME}-messenger-consume"
-    restart: always
-    entrypoint: ./docker/sh/messenger_consume.sh
-    volumes:
-      - ./:/var/www/html
     networks:
       - app-network
   postgres:
     image: postgres:13.3
-    container_name: "${APP_NAME}-postgres"
-    restart: always
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgre:/var/lib/postgresql/data
-      - ./docker/logs/postgres:/var/log/postgresql
     environment:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USER}
@@ -52,8 +28,6 @@ services:
     networks:
       - app-network
   rabbitmq:
-    container_name: '${APP_NAME}-rabbitmq'
-    restart: always
     image: rabbitmq:3.9.5
     ports:
       - "127.0.0.1:5672:5672"
@@ -65,8 +39,6 @@ services:
       - app-network
   node:
     image: node:16
-    restart: always
-    container_name: "${APP_NAME}-node"
     volumes:
       - .:/var/www/html
     command: sh -c "npm install -g npm && cd /var/www/html && npm install && npm audit fix && npx encore dev --watch"
@@ -74,10 +46,9 @@ services:
       - app-network
   selenium-hub:
     image: selenium/hub:4.0.0-rc-2-prerelease-20210907
-    restart: always
-    container_name: "${APP_NAME}-selenium-hub"
+    
     depends_on:
-      - app-web
+      - php
     ports:
       - "127.0.0.1:4442:4442"
       - "127.0.0.1:4443:4443"
@@ -86,12 +57,11 @@ services:
       - app-network
   chrome:
     image: selenium/node-chrome:4.0.0-rc-2-prerelease-20210907
-    restart: always
-    container_name: "${APP_NAME}-chrome"
+
     shm_size: 2gb
     depends_on:
       - selenium-hub
-      - app-web
+      - php
     environment:
       - SE_EVENT_BUS_HOST=selenium-hub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
@@ -102,7 +72,7 @@ services:
       - app-network
   mailhog:
     image: mailhog/mailhog:v1.0.1
-    restart: unless-stopped
+  
     networks:
       - app-network
     ports:

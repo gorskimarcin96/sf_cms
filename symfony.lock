@@ -17,12 +17,6 @@
     "composer/xdebug-handler": {
         "version": "2.0.1"
     },
-    "cron/cron": {
-        "version": "1.5.2"
-    },
-    "cron/cron-bundle": {
-        "version": "2.6.0"
-    },
     "dbrekelmans/bdi": {
         "version": "1.0"
     },

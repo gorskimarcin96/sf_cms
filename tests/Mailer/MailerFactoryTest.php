@@ -4,6 +4,7 @@ namespace App\Tests\Mailer;
 
 use App\Mailer\MailerFactory;
 use App\Mailer\MailerWrongTypeException;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class MailerFactoryTest extends KernelTestCase
@@ -44,6 +45,6 @@ class MailerFactoryTest extends KernelTestCase
     {
         $emails = $this->mailerFactory->create('from@test.test', ['to@test.test'], MailerFactory::APELINIA_TYPE);
 
-        $this->assertIsString($emails[0]->getHtmlBody());
+        $this->assertInstanceOf(TemplatedEmail::class, $emails[0]);
     }
 }

@@ -45,4 +45,11 @@ class StringConverter
 
         return $this;
     }
+
+    public function trim(): self
+    {
+        $this->string = trim($this->string);
+
+        return $this;
+    }
 }
