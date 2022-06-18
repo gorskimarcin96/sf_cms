@@ -11,8 +11,8 @@ use App\Entity\Realization;
 use App\Entity\Slider;
 use App\Entity\Task;
 use App\File\FileManager;
-use App\File\LogReader;
 use App\Form\CVType;
+use App\Ovh\Client;
 use App\Repository\ConstantRepository;
 use App\Shell\Process;
 use App\String\Traits\NamespaceHelperTrait;
@@ -23,13 +23,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Exception;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
@@ -44,7 +41,8 @@ class DashboardController extends AbstractDashboardController
         private FileManager        $fileManager,
         private RequestStack       $requestStack,
         private UrlHelper          $url,
-        private Process            $process
+        private Process            $process,
+        private Client             $client
     ) {
     }
 
@@ -59,6 +57,7 @@ class DashboardController extends AbstractDashboardController
             'charts'       => $this->counterChart->get(),
             'statics_data' => $this->counterStatistic->get(),
             'processes'    => $this->process->finds(),
+            'services'     => $this->client->getServices()
         ]);
     }
 
