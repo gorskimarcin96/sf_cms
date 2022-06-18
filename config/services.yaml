@@ -8,6 +8,10 @@ parameters:
     app.google_map: '%env(APP_GOOGLE_MAP)%'
     encryption_manager.method: '%env(ENCRYPTION_MANAGER_METHOD)%'
     encryption_manager.iv: '%env(ENCRYPTION_MANAGER_IV)%'
+    ovh.application_key: '%env(OVH_APPLICATION_KEY)%'
+    ovh.application_secret: '%env(OVH_APPLICATION_SECRET)%'
+    ovh.api_endpoint: '%env(OVH_API_ENDPOINT)%'
+    ovh.consumer_key: '%env(OVH_CONSUMER_KEY)%'
 
 services:
     _defaults:
@@ -45,3 +49,12 @@ services:
 
     App\Image\Image:
         autowire: false
+
+    Ovh\Api:
+        autowire: true
+        arguments: [
+            '%ovh.application_key%',
+            '%ovh.application_secret%',
+            '%ovh.api_endpoint%',
+            '%ovh.consumer_key%'
+        ]
