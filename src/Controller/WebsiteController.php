@@ -26,16 +26,15 @@ class WebsiteController extends AbstractController
 
     #[Route('/', name: 'homepage')]
     public function index(
-        Request               $request,
-        SliderRepository      $sliderRepository,
-        ArticleRepository     $articleRepository,
-        OfferRepository       $offerRepository,
+        SliderRepository $sliderRepository,
+        ArticleRepository $articleRepository,
+        OfferRepository $offerRepository,
         RealizationRepository $realizationRepository
     ): Response {
         return $this->render('website/homepage.html.twig', [
-            'sliders'      => $sliderRepository->findAll(),
-            'articles'     => $articleRepository->findAll(),
-            'offers'       => $offerRepository->findAll(),
+            'sliders' => $sliderRepository->findAll(),
+            'articles' => $articleRepository->findAll(),
+            'offers' => $offerRepository->findAll(),
             'realizations' => $realizationRepository->findAll(),
         ]);
     }
@@ -50,19 +49,24 @@ class WebsiteController extends AbstractController
             try {
                 $data = $form->getData();
 
-                $email = (new Email())
-                    ->from($data['email'])
-                    ->to($this->getParameter('app.email'))
-                    ->subject('Formularz kontaktowy mgorski.dev')
-                    ->html(
-                        $this->renderView('website/email.html.twig', [
-                            'email'       => $data['email'],
-                            'description' => $data['message'],
-                        ])
-                    );
-                $mailer->send($email);
+                if ((int)$data['number'] === 5) {
+                    $email = (new Email())
+                        ->from($data['email'])
+                        ->to($this->getParameter('app.email'))
+                        ->subject('Formularz kontaktowy mgorski.dev')
+                        ->html(
+                            $this->renderView('website/email.html.twig', [
+                                'email' => $data['email'],
+                                'description' => $data['message'],
+                            ])
+                        );
 
-                $this->addFlash('success', $translator->trans('The form has been sent.'));
+                    $mailer->send($email);
+
+                    $this->addFlash('success', $translator->trans('The form has been sent.'));
+                } else {
+                    $this->addFlash('success', $translator->trans('Math operation is not valid.'));
+                }
             } catch (TransportExceptionInterface $exception) {
                 $this->addFlash('danger', $translator->trans('An error has occurred.'));
             }

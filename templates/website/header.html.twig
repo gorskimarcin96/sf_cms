@@ -18,26 +18,23 @@
 </div>
 
 <header class="my-0 col-12 main-header">
-    <nav class="navbar navbar-expand-sm container text-uppercase navbar-light ">
-        <a class="navbar-brand ml-1" href="{{ url('homepage') }}">
-            <img src="{{ asset("/build/img/mgorski.png") }}" class="align-top mx-auto d-block" alt="mgorski">
-        </a>
+    <div class="container">
+        <nav class="navbar navbar-expand-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand ml-1" href="{{ url('homepage') }}">
+                    <img src="{{ asset("/build/img/mgorski.png") }}" class="align-top mx-auto d-block" alt="mgorski">
+                </a>
 
-        <button type="button" data-toggle="collapse" data-target="#navbar"
-                class="btn btn-lg bg-success navbar-toggler text-dark">
-            <i class="fa fa-bars"></i>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbar">
-            <ul class="navbar-nav mr-auto">
-                {% for menu in frontendManager.menu %}
-                    <li class="nav-item mx-2">
-                        <a class="link px-1 {{ menu.active ? 'active' : ''}}"
-                           href="{{ menu.url }}">  {{ menu.name|upper }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </nav>
+                <ul class="navbar-nav  me-md-auto">
+                    {% for menu in frontendManager.menu %}
+                        <li class="nav-item mx-2">
+                            <a class="link px-1 {{ menu.active ? 'active' : ''}}"
+                               href="{{ menu.url }}">  {{ menu.name|upper }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </nav>
+    </div>
 </header>
