@@ -2,8 +2,8 @@
 
 namespace App\Controller\Admin;
 
-use App\EasyAdmin\Field\TranslationField;
 use App\Entity\Article;
+use App\Tools\EasyAdmin\Field\TranslationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;

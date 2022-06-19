@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Mailer\MailerFactory;
 use App\Message\Mailer;
+use App\Tools\Mailer\MailerFactory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
