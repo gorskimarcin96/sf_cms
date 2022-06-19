@@ -2,9 +2,9 @@
 
 namespace App\MessageHandler;
 
-use App\Crawler\Facebook\Facebook;
 use App\Message\SendTextInMessenger;
-use App\Task\Messenger\MessengerManager;
+use App\Tools\Crawler\Facebook\Facebook;
+use App\Tools\Task\Messenger\MessengerManager;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class SendTextInMessengerHandler implements MessageHandlerInterface

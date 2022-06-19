@@ -2,11 +2,11 @@
 
 namespace App\Command;
 
-use App\Crawler\Facebook\DogJokes;
-use App\Crawler\Facebook\Exception\ImageNotFoundException;
 use App\DBAL\Types\LocaleType;
 use App\Entity\DogJoke;
 use App\Repository\DogJokeRepository;
+use App\Tools\Crawler\Facebook\DogJokes;
+use App\Tools\Crawler\Facebook\Exception\ImageNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;

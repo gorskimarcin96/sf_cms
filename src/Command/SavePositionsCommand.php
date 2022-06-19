@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Crawler\Ofeminin;
 use App\Entity\Position;
+use App\Tools\Crawler\Ofeminin;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

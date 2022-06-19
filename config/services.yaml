@@ -35,19 +35,16 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postLoad }
 
-    App\File\LogReader:
+    App\Tools\Mailer\MailerWrongTypeException:
         autowire: false
 
-    App\Mailer\MailerWrongTypeException:
+    App\Tools\String\StringConverter:
         autowire: false
 
-    App\String\StringConverter:
+    App\Tools\Mailer\AbstractMailCreator:
         autowire: false
 
-    App\Mailer\AbstractMailCreator:
-        autowire: false
-
-    App\Image\Image:
+    App\Tools\Image\Image:
         autowire: false
 
     Ovh\Api:

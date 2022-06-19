@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\EasyAdmin\Helper\UrlHelper;
 use App\Entity\Article;
 use App\Entity\Constant;
 use App\Entity\MessengerMessages;
@@ -10,15 +9,16 @@ use App\Entity\Offer;
 use App\Entity\Realization;
 use App\Entity\Slider;
 use App\Entity\Task;
-use App\File\FileManager;
 use App\Form\CVType;
-use App\Ovh\Client;
 use App\Repository\ConstantRepository;
-use App\Shell\Process;
-use App\String\Traits\NamespaceHelperTrait;
-use App\WebFeatures\Backend\PdfManager;
-use App\WebFeatures\Both\Counter\CounterChart;
-use App\WebFeatures\Both\Counter\CounterStatistic;
+use App\Tools\EasyAdmin\Helper\UrlHelper;
+use App\Tools\File\FileManager;
+use App\Tools\Integration\Ovh\Client;
+use App\Tools\Shell\Process;
+use App\Tools\String\Traits\NamespaceHelperTrait;
+use App\Tools\WebFeatures\Backend\PdfManager;
+use App\Tools\WebFeatures\Both\Counter\CounterChart;
+use App\Tools\WebFeatures\Both\Counter\CounterStatistic;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -54,9 +54,9 @@ class DashboardController extends AbstractDashboardController
         }
 
         return $this->render('easyadmin/dashboard.html.twig', [
-            'charts'       => $this->counterChart->get(),
+            'chart'        => $this->counterChart->get(),
             'statics_data' => $this->counterStatistic->get(),
-            'processes'    => $this->process->finds(),
+            'processes'    => $this->process->finds('php'),
             'services'     => $this->client->getServices()
         ]);
     }
