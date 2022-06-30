@@ -7,6 +7,7 @@ use App\Entity\Constant;
 use App\Entity\DogJoke;
 use App\Entity\MessengerMessages;
 use App\Entity\Offer;
+use App\Entity\Password;
 use App\Entity\Position;
 use App\Entity\Realization;
 use App\Entity\Slider;
@@ -127,6 +128,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToUrl('Homepage', 'fa fa-home', $this->generateUrl('homepage'));
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-desktop')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToRoute('Todo', 'fas fa-clipboard-list', 'easyadmin_todolist_index');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Password::class), 'fas fa-key', Password::class);
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(DogJoke::class), 'fas fa-table', DogJoke::class);
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(Position::class), 'fas fa-table', Position::class);
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(Article::class), 'fas fa-list', Article::class)->setPermission('ROLE_ADMIN');

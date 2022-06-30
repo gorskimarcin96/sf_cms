@@ -13,3 +13,4 @@ docker-compose exec php php -d memory_limit=4G vendor/bin/phpstan analyze src
 docker-compose exec php php -d memory_limit=4G vendor/bin/phpstan analyze tests
 docker-compose exec php php -d memory_limit=4G ./bin/phpunit
 #docker-compose exec php bin/console app:save-dog-jokes
+#docker-compose exec postgres pg_dump sf_cms --table public.dog_joke_2 --inserts --rows-per-insert=500 -a -U user > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql

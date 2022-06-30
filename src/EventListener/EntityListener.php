@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Entity\Password;
 use App\Entity\Task;
 use App\Security\EncryptionManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -18,6 +19,10 @@ class EntityListener
 
         if ($entity instanceof Task) {
             $entity->setEncryptionManager($this->encryptionManager);
+        }
+
+        if ($entity instanceof Password) {
+            $entity->setPassword($this->encryptionManager->encrypt($entity->getPassword()));
         }
     }
 }

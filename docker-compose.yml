@@ -46,7 +46,6 @@ services:
       - app-network
   selenium-hub:
     image: selenium/hub:4.0.0-rc-2-prerelease-20210907
-    
     depends_on:
       - php
     ports:
@@ -57,7 +56,6 @@ services:
       - app-network
   chrome:
     image: selenium/node-chrome:4.0.0-rc-2-prerelease-20210907
-
     shm_size: 2gb
     depends_on:
       - selenium-hub
@@ -72,7 +70,6 @@ services:
       - app-network
   mailhog:
     image: mailhog/mailhog:v1.0.1
-  
     networks:
       - app-network
     ports:
