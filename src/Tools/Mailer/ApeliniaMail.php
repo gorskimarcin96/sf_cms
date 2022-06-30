@@ -98,7 +98,7 @@ class ApeliniaMail extends AbstractMailCreator
             $fileName = 'pozycja.png';
             if (null !== ($position = $this->positionRepository->randOne())) {
                 $this->fileManager->saveFile(
-                    $position->getImage(),
+                    base64_decode($position->getImage()),
                     $fileName,
                     true
                 );
@@ -120,7 +120,7 @@ class ApeliniaMail extends AbstractMailCreator
             $fileName = 'dog_joke.jpg';
             if ((null !== $dogJoke = $this->dogJokeRepository->randOne())) {
                 $this->fileManager->saveFile(
-                    $dogJoke->getImage(),
+                    base64_decode($dogJoke->getImage()),
                     $fileName,
                     true
                 );

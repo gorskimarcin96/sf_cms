@@ -4,8 +4,10 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use App\Entity\Constant;
+use App\Entity\DogJoke;
 use App\Entity\MessengerMessages;
 use App\Entity\Offer;
+use App\Entity\Position;
 use App\Entity\Realization;
 use App\Entity\Slider;
 use App\Entity\Task;
@@ -121,10 +123,12 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        //https://fontawesome.com/v5.15/icons?d=gallery&p=2&m=free
+        //https://fontawesome.com/v5/search?m=free
         yield MenuItem::linkToUrl('Homepage', 'fa fa-home', $this->generateUrl('homepage'));
         yield MenuItem::linktoDashboard('Dashboard', 'fa fa-desktop')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToRoute('Todo', 'fas fa-clipboard-list', 'easyadmin_todolist_index');
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(DogJoke::class), 'fas fa-table', DogJoke::class);
+        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Position::class), 'fas fa-table', Position::class);
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(Article::class), 'fas fa-list', Article::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(Offer::class), 'fas fa-newspaper', Offer::class)->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud($this->getLastNameInNamespace(Slider::class), 'fas fa-address-card', Slider::class)->setPermission('ROLE_ADMIN');

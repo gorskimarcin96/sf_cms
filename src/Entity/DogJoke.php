@@ -60,7 +60,7 @@ class DogJoke
 
     public function getImage(): ?string
     {
-        return base64_decode($this->image);
+        return $this->image;
     }
 
     public function setImage(string $image): self
