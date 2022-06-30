@@ -9,7 +9,6 @@ use Facebook\WebDriver\WebDriverBy;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Panther\Client;
 use TypeError;
-use function App\Crawler\Facebook\str_contains;
 
 abstract class Facebook
 {
