@@ -25,7 +25,7 @@ class Realization
     #[ORM\Column(type: "string", length: 255)]
     private string $url;
 
-    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "realizations")]
+    #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 

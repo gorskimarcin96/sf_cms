@@ -16,7 +16,7 @@ class Client
     /** @return Service[] */
     public function getServices(): array
     {
-        return (new FilesystemAdapter())->get('servicess', function (ItemInterface $item) {
+        return (new FilesystemAdapter())->get('services', function (ItemInterface $item) {
             $item->expiresAfter(3600);
 
             foreach ($this->api->get('/service') as $service) {

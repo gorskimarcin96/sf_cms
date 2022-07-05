@@ -30,7 +30,7 @@ class Process
     public function finds(string $searchCommand = ''): array
     {
         $output = new BufferedOutput();
-        $output->write(shell_exec($searchCommand !== "" ? sprintf('ps a | grep "%s"', $searchCommand) : 'ps a'));
+        $output->write(shell_exec($searchCommand !== "" ? sprintf('ps a | grep "%s"', $searchCommand) : 'ps a') ?? '');
         $response = $output->fetch();
         $lines = $response ? preg_split('/\n+/', trim($response)) : [];
 

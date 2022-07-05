@@ -22,7 +22,7 @@ class Article implements TranslatableInterface
     #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "articles")]
+    #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 

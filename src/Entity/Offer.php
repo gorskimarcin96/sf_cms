@@ -20,7 +20,7 @@ class Offer implements TranslatableInterface
     #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "offers")]
+    #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 

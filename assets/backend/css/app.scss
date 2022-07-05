@@ -1,3 +1,28 @@
+.ea-dark-scheme {
+  .card {
+    background-color: var(--true-gray-700);
+    color: var(--text-color-dark);
+  }
+
+  .table {
+    color: var(--text-color-dark);
+  }
+
+  .table-striped tbody {
+    tr:nth-of-type(odd) > * {
+      color: var(--gray-400);
+    }
+
+    tr.table-primary > td, tr.table-secondary > td, tr.table-info > td, tr.table-warning > td, tr.table-danger > td, tr.table-light > td {
+      color: var(--black);
+    }
+
+    tr.table-dark {
+      color: var(--white);
+    }
+  }
+}
+
 .todo-task-image {
   height: auto;
   width: auto;

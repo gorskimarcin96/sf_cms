@@ -21,7 +21,7 @@ class Slider implements TranslatableInterface
     #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "sliders")]
+    #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
