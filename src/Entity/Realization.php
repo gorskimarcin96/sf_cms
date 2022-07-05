@@ -7,37 +7,26 @@ use App\Entity\Traits\TimeStampableTrait;
 use App\Repository\RealizationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RealizationRepository::class)
- * @ORM\Cache("NONSTRICT_READ_WRITE")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Entity(repositoryClass: RealizationRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class Realization
 {
     use TimeStampableTrait;
     use FileUploadTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $title;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $url;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="realizations")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "realizations")]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
     public function getId(): ?int

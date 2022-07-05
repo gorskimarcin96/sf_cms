@@ -4,34 +4,20 @@ namespace App\Entity\Traits;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
 
-/**
- * Trait TimeStampableTrait.
- */
 trait TimeStampableTrait
 {
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: "datetime")]
     private DateTime $updatedAt;
 
-    /**
-     * @throws Exception
-     */
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt ?? new DateTime();
     }
 
-    /**
-     * @return $this
-     */
     public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
@@ -44,9 +30,6 @@ trait TimeStampableTrait
         return $this->updatedAt ?? new DateTime();
     }
 
-    /**
-     * @return $this
-     */
     public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
@@ -54,10 +37,8 @@ trait TimeStampableTrait
         return $this;
     }
 
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
+    #[ORM\PrePersist()]
+    #[ORM\PreUpdate()]
     public function updateTimestamps(): void
     {
         $now = new DateTime();

@@ -2,32 +2,26 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\TimeStampableTrait;
+use App\Repository\OfferRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\OfferRepository")
- * @ORM\Cache("NONSTRICT_READ_WRITE")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Entity(repositoryClass: OfferRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class Offer implements TranslatableInterface
 {
     use TranslatableTrait;
     use TimeStampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="offers")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "offers")]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
     public function getId(): ?int

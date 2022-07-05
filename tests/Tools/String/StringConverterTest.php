@@ -10,7 +10,7 @@ class StringConverterTest extends TestCase
     public function testGetString()
     {
         $stringConverter = new StringConverter('test string');
-        
+
         $this->assertIsString($stringConverter->getString());
     }
 

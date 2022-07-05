@@ -8,9 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class FileManagerTest extends TestCase
 {
-    private FileManager $fileManager;
-
     use Invoker;
+    private FileManager $fileManager;
 
     protected function setUp(): void
     {
@@ -36,7 +35,7 @@ class FileManagerTest extends TestCase
 
     public function testSaveFile(): void
     {
-        $this->fileManager->saveFile('http://localhost/build/img/mgorski.png', 'mgorski.png',);
+        $this->fileManager->saveFile('http://localhost/build/img/mgorski.png', 'mgorski.png', );
         $this->assertFileExists(__DIR__ . '/public/mgorski.png');
     }
 

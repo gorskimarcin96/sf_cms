@@ -7,65 +7,43 @@ use App\Repository\PasswordRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\String\ByteString;
 
-/**
- * @ORM\Entity(repositoryClass=PasswordRepository::class)
- * @ORM\Cache("NONSTRICT_READ_WRITE")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Entity(repositoryClass: PasswordRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class Password
 {
     use TimeStampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
+    #[ORM\Column(type: "string", length: 100)]
     private string $website;
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
+
+    #[ORM\Column(type: "string", length: 100)]
     private string $login;
 
-    /**
-     * @ORM\Column(type="string", length=500)
-     */
+    #[ORM\Column(type: "string", length: 500)]
     private string $password;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
+    #[ORM\Column(type: "string", length: 20)]
     private string $salt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\JoinColumn(nullable: false)]
     private User $user;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $isPublic = false;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $usePin;
 
-    /**
-     * @ORM\Column(type="smallint", nullable=true)
-     */
+    #[ORM\Column(type: "smallint", nullable: true)]
     private string $daysToPasswordChange;
 
     private ?int $pin = null;
@@ -164,14 +142,13 @@ class Password
         return $this;
     }
 
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
+
+    #[ORM\PrePersist()]
+    #[ORM\PreUpdate()]
     public function saltPassword(): void
     {
         $this->usePin = (bool)strlen($this->pin);
-        $this->password = $this->getUsePin() ? ($this->pin . $this->password . $this->salt) : $this->password;
+        $this->password = $this->getUsePin() ? ($this->pin.$this->password.$this->salt) : $this->password;
     }
 
     public function isPublic(): bool

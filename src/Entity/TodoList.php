@@ -9,45 +9,31 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Form\FormView;
 
-/**
- * @ORM\Entity(repositoryClass=TodoListRepository::class)
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Entity(repositoryClass: TodoListRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class TodoList
 {
     use TimeStampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $isDone = false;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="todoLists")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "todoLists")]
     private User $user;
 
-    /**
-     * @ORM\OneToMany(targetEntity=TodoTask::class, mappedBy="todoList")
-     */
+    #[ORM\OneToMany(mappedBy: "todoList", targetEntity: TodoTask::class)]
     private Collection $todoTasks;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class)
-     * @ORM\JoinTable(name="todo_list_user_access")
-     */
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\JoinTable(name: "todo_list_user_access")]
     private Collection $userAccess;
 
     private ?FormView $formView = null;

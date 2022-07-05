@@ -6,29 +6,21 @@ use App\Entity\Traits\TimeStampableTrait;
 use App\Repository\DailyImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=DailyImageRepository::class)
- */
+#[ORM\Entity(repositoryClass: DailyImageRepository::class)]
 class DailyImage
 {
     use TimeStampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private ?int $id = null;
+    #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type: "integer")]
+     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private string $name;
+    #[ORM\Column(type: "string", length: 255)]
+     private string $name;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private string $image;
+    #[ORM\Column(type: "text")]
+     private string $image;
 
     public function getId(): int
     {

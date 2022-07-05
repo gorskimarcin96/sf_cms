@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait FileUploadTrait
 {
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $fileFn;
 
     public function getFileFn(): string

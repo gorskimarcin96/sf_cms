@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class WebsiteControllerTest extends WebTestCase
 {
-
     public function testHomepage()
     {
         $client = static::createClient();

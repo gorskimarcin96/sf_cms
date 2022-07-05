@@ -5,37 +5,25 @@ namespace App\Entity;
 use App\Repository\PositionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=PositionRepository::class)
- */
+#[ORM\Entity(repositoryClass: PositionRepository::class)]
 class Position
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private ?string $title;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private ?string $image;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private ?string $first_section;
+    #[ORM\Column(type: "text")]
+    private ?string $firstSection;
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private ?string $second_section;
+    #[ORM\Column(type: "text")]
+    private ?string $secondSection;
 
     public function getId(): ?int
     {
@@ -72,24 +60,24 @@ class Position
 
     public function getFirstSection(): ?string
     {
-        return $this->first_section;
+        return $this->firstSection;
     }
 
-    public function setFirstSection(string $first_section): self
+    public function setFirstSection(string $firstSection): self
     {
-        $this->first_section = $first_section;
+        $this->firstSection = $firstSection;
 
         return $this;
     }
 
     public function getSecondSection(): ?string
     {
-        return $this->second_section;
+        return $this->secondSection;
     }
 
-    public function setSecondSection(string $second_section): self
+    public function setSecondSection(string $secondSection): self
     {
-        $this->second_section = $second_section;
+        $this->secondSection = $secondSection;
 
         return $this;
     }

@@ -5,29 +5,21 @@ namespace App\Entity;
 use App\Repository\ConstantRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ConstantRepository::class)
- */
+#[ORM\Entity(repositoryClass: ConstantRepository::class)]
 class Constant
 {
     public const CV = 'CV';
     public const CV_DRAFT = 'CV_DRAFT';
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private ?string $title;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private ?string $description;
 
     public function getId(): ?int

@@ -6,49 +6,33 @@ use App\Entity\Traits\TimeStampableTrait;
 use App\Repository\TodoTaskRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=TodoTaskRepository::class)
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Entity(repositoryClass: TodoTaskRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class TodoTask
 {
     use TimeStampableTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $description;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private bool $isDone = false;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $fileFn = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="todoTasks")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "todoTasks")]
     private User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=TodoList::class, inversedBy="todoTasks")
-     */
+    #[ORM\ManyToOne(targetEntity: TodoList::class, inversedBy: "todoTasks")]
     private TodoList $todoList;
 
     public function getId(): ?int
@@ -104,7 +88,7 @@ class TodoTask
 
     public function getPathFileFn(): string
     {
-        return $this->getUploadDir() . '/' . $this->fileFn;
+        return $this->getUploadDir().'/'.$this->fileFn;
     }
 
     public function setFileFn(string $fileFn): self

@@ -59,7 +59,7 @@ class ApeliniaMail extends AbstractMailCreator
         $collection->addSection(
             '<h1>💜💋🧡 Love letter 🧡💋💜</h1>',
             '<p>Jesteśmy razem '.$this->getApeliniaFirstTime().'! Ten wyjątkowy i niepowtarzalny dzień chce szczególnie uczcić!</p>
-            <p>'.((new DateTime(self::WEDDING_TIME))>$now?'Do ślubu zostało ':'Jesteśmy po ślubie ').$this->getApeliniaWeddingTime().'</p>'
+            <p>'.((new DateTime(self::WEDDING_TIME))>$now ? 'Do ślubu zostało ' : 'Jesteśmy po ślubie ').$this->getApeliniaWeddingTime().'</p>'
         );
 
         try {
