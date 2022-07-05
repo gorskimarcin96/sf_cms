@@ -22,7 +22,7 @@ class PositionCrudController extends AbstractCrudController
         yield IntegerField::new('id');
         yield TextField::new('image')->setTemplatePath('easyadmin/fields/image_base64.html.twig');
         yield TextField::new('title');
-        yield TextField::new('first_section');
+        yield TextField::new('first_section')->setTemplatePath('easyadmin/fields/raw.html.twig');
         yield TextField::new('second_section')->setTemplatePath('easyadmin/fields/raw.html.twig');
     }
 
@@ -35,6 +35,8 @@ class PositionCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud->setPaginatorPageSize(100);
+        return $crud
+            ->setDefaultSort(['positionType' => 'ASC', 'id' => 'ASC'])
+            ->setPaginatorPageSize(100);
     }
 }

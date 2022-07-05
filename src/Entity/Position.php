@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use App\DBAL\Types\PositionType;
 use App\Repository\PositionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Fresh\DoctrineEnumBundle\Validator\Constraints as DoctrineAssert;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
 class Position
@@ -24,6 +26,10 @@ class Position
 
     #[ORM\Column(type: "text")]
     private ?string $secondSection;
+
+    #[ORM\Column(type: PositionType::class, length: 2)]
+    #[DoctrineAssert\EnumType(entity: PositionType::class)]
+    private string $positionType;
 
     public function getId(): ?int
     {
@@ -50,7 +56,7 @@ class Position
     public function setImage(string $image): self
     {
         if (!str_contains($image, 'http:')) {
-            $image = 'http:' . $image;
+            $image = 'http:'.$image;
         }
 
         $this->image = base64_encode(file_get_contents($image));
@@ -78,6 +84,19 @@ class Position
     public function setSecondSection(string $secondSection): self
     {
         $this->secondSection = $secondSection;
+
+        return $this;
+    }
+
+    public function getPositionType(): string
+    {
+        return $this->positionType;
+    }
+
+    public function setPositionType(string $positionType): self
+    {
+        PositionType::assertValidChoice($positionType);
+        $this->positionType = $positionType;
 
         return $this;
     }

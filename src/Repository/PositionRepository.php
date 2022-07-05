@@ -23,4 +23,9 @@ class PositionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Position::class);
     }
+
+    public function findOneByTitleAndType($title, string $positionType): ?Position
+    {
+        return $this->findOneBy(['title' => $title, 'positionType' => $positionType]);
+    }
 }

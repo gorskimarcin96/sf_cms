@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Tools\Crawler;
+namespace App\Tools\Crawler\Camasutra;
 
 use App\Tools\String\StringConverter;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class Ofeminin
+class Ofeminin implements CamasutraInterface
 {
-    public const KAMASUTRA_URL = 'https://www.ofeminin.pl/milosc/kamasutra-wszystkie-pozycje';
+    public const PAGE = 'https://www.ofeminin.pl/milosc/kamasutra-wszystkie-pozycje';
 
     public function __construct(private HttpClientInterface $client)
     {
@@ -19,15 +19,16 @@ class Ofeminin
         foreach ($this->getUrls() as $url) {
             $response = $this->client->request('GET', $url);
             $crawler = new Crawler($response->getContent(false));
+            $image = $crawler->filter('img.lmImg')->attr('src');
             $sections = [];
 
             foreach ([$crawler->filter('.lead')->html(), $crawler->filter('.whitelistPremium')->html()] as $html) {
-                $sections[] = (new StringConverter($html))->removeMultiSpaces()->removeMultilines()->removeScriptTag()->getString();
+                $sections[] = (new StringConverter($html))->removeMultiSpaces()->removeMultilines()->removeHtmlTag('script')->toString();
             }
 
             yield [
                 'title' => $crawler->filter('h1')->text(),
-                'image' => $crawler->filter('img.lmImg')->attr('src'),
+                'image' => str_contains($image, 'http:') ? $image : ('http:' . $image),
                 'sections' => $sections
             ];
         }
@@ -40,12 +41,12 @@ class Ofeminin
 
     private function getUrls(): array
     {
-        $response = $this->client->request('GET', self::KAMASUTRA_URL);
+        $response = $this->client->request('GET', self::PAGE);
         $crawler = new Crawler($response->getContent(false));
         $lastPage = $crawler->filter('ul.paginatorUl>li.paginatorLi')->last()->text();
 
         foreach (range(1, $lastPage) as $page) {
-            $response = $this->client->request('GET', self::KAMASUTRA_URL . '?page=' . $page);
+            $response = $this->client->request('GET', self::PAGE . '?page=' . $page);
             $crawler = new Crawler($response->getContent(false));
 
             $newUrls = $crawler->filter('.stream a')->each(function (Crawler $node, $i) {
@@ -56,5 +57,10 @@ class Ofeminin
         }
 
         return $urls ?? [];
+    }
+
+    public function isCountable(): bool
+    {
+        return true;
     }
 }

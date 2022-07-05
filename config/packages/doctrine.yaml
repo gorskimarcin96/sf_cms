@@ -5,6 +5,7 @@ doctrine:
             enum: string
         types:
             LocaleType: App\DBAL\Types\LocaleType
+            App\DBAL\Types\PositionType: App\DBAL\Types\PositionType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
