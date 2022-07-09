@@ -23,6 +23,7 @@ use App\Tools\WebFeatures\Backend\PdfManager;
 use App\Tools\WebFeatures\Both\Counter\CounterChart;
 use App\Tools\WebFeatures\Both\Counter\CounterStatistic;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Exception;
@@ -144,5 +145,12 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets
     {
         return parent::configureAssets()->addWebpackEncoreEntry('backend');
+    }
+
+    public function configureDashboard(): Dashboard
+    {
+        return Dashboard::new()
+            ->setTitle('<img src="/build/favicon/favicon.svg" alt="logo" width="50" class="bg-white p-1"> mgorski.dev')
+            ->setFaviconPath('/build/favicon/favicon.svg');
     }
 }

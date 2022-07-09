@@ -15,11 +15,31 @@
 
     tr.table-primary > td, tr.table-secondary > td, tr.table-info > td, tr.table-warning > td, tr.table-danger > td, tr.table-light > td {
       color: var(--black);
+
+      a {
+        color: var(--blue-700);
+
+        &:hover {
+          color: var(--blue-500);
+        }
+      }
     }
 
     tr.table-dark {
       color: var(--white);
+
+      a {
+        color: var(--blue-700);
+
+        &:hover {
+          color: var(--blue-500);
+        }
+      }
     }
+  }
+
+  .table-hover tbody > tr:hover {
+    background-color: var(--black);
   }
 }
 

@@ -10,13 +10,13 @@ Encore
     .copyFiles({
         from: './assets/favicon',
         to: 'favicon/[path][name].[ext]',
-        pattern: /\.(png|jpg|jpeg)$/,
+        pattern: /\.(png|jpg|jpeg|svg)$/,
         includeSubdirectories: true,
     })
     .copyFiles({
         from: './assets/img',
         to: 'img/[path][name].[ext]',
-        pattern: /\.(png|jpg|jpeg)$/,
+        pattern: /\.(png|jpg|jpeg|svg)$/,
         includeSubdirectories: true,
     })
     .addEntry('frontend', './assets/frontend.js')
