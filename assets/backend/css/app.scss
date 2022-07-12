@@ -8,6 +8,17 @@
     color: var(--text-color-dark);
   }
 
+  .form-control {
+    background-color: var(--form-control-bg);
+    background-repeat: no-repeat;
+    border: 1px solid var(--form-input-border-color);
+    box-shadow: var(--form-input-shadow);
+    color: var(--form-input-text-color);
+    transition: box-shadow .08s ease-in,color .08s ease-in;
+    white-space: nowrap;
+    word-break: keep-all;
+  }
+
   .table-striped tbody {
     tr:nth-of-type(odd) > * {
       color: var(--gray-400);
@@ -41,6 +52,10 @@
   .table-hover tbody > tr:hover {
     background-color: var(--black);
   }
+}
+
+.btn-group .form-control {
+  padding: 4px 8px;
 }
 
 .todo-task-image {

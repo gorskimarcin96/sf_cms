@@ -1,0 +1,23 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block page_actions_wrapper %}
+    <div class="page-actions">
+        {% if app.request.get('crudControllerFqcn') == "App\\Controller\\Admin\\PasswordCrudController" and
+            app.request.get('crudAction') in ['new', 'edit'] %}
+        <div class="btn-group me-2" role="group">
+            <input type="checkbox" class="btn-check" id="special_chars" checked="checked">
+            <label class="btn btn-outline-primary" for="special_chars">!@#$%^&*?()[]<></label>
+            <input type="checkbox" class="btn-check" id="AZ" checked="checked">
+            <label class="btn btn-outline-primary" for="AZ">A-Z</label>
+            <input type="checkbox" class="btn-check" id="az" checked="checked">
+            <label class="btn btn-outline-primary" for="az">a-z</label>
+            <input type="checkbox" class="btn-check" id="numbers" checked="checked">
+            <label class="btn btn-outline-primary" for="numbers">0-9</label>
+            <input type="number" class="form-control rounded-0" id="password_length" min="0" max="50" value="20"/>
+            <button type="button" class="btn btn-success" id="rand_password">{{ "Rand password"|trans }}</button>
+        </div>
+        {% endif %}
+
+        {% block page_actions %}{% endblock %}
+    </div>
+{% endblock %}

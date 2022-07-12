@@ -11,14 +11,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class PasswordCrudController extends AbstractCrudController
+class PasswordCrudController extends AbstractCrudController implements EventSubscriberInterface
 {
     public static function getEntityFqcn(): string
     {
@@ -30,6 +33,24 @@ class PasswordCrudController extends AbstractCrudController
         return (new Password())->setUser($this->getUser());
     }
 
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            BeforeCrudActionEvent::class => ['setDefaultEditData'],
+        ];
+    }
+
+    public function setDefaultEditData(BeforeCrudActionEvent $event): void
+    {
+        $entity = $event->getAdminContext()?->getEntity()->getInstance();
+
+        if (!($entity instanceof Password)) {
+            return;
+        }
+
+        $entity->setPassword('');
+    }
+
     public function configureFields(string $pageName): iterable
     {
         yield AssociationField::new('user')->hideOnForm();
@@ -37,7 +58,7 @@ class PasswordCrudController extends AbstractCrudController
         yield TextField::new('login');
         yield TextField::new('password')->onlyOnForms();
         yield PasswordIndexField::new('password')->onlyOnIndex();
-        yield NumberField::new('pin')->onlyOnForms();
+        yield NumberField::new('pin')->setFormType(PasswordType::class)->onlyOnForms();
         yield TextField::new('description');
         yield NumberField::new('daysToPasswordChange');
         yield DateTimeField::new('updatedAt')->onlyOnIndex();
@@ -60,6 +81,7 @@ class PasswordCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud->setPaginatorPageSize(1000)
-            ->overrideTemplate('crud/index', 'easyadmin/password_list.html.twig');
+            ->overrideTemplate('crud/index', 'easyadmin/password_list.html.twig')
+            ->overrideTemplate('layout', 'easyadmin/layout.html.twig');
     }
 }
