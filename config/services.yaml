@@ -59,3 +59,9 @@ services:
             '%ovh.api_endpoint%',
             '%ovh.consumer_key%'
         ]
+
+    Spatie\Dropbox\Client:
+        autowire: true
+        arguments: [
+            '%env(DROPBOX_APIKEY)%'
+        ]
