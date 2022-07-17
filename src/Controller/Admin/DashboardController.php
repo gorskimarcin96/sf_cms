@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Anniversary;
 use App\Entity\Article;
 use App\Entity\Constant;
 use App\Entity\DogJoke;
@@ -16,6 +17,7 @@ use App\Form\CVType;
 use App\Repository\ConstantRepository;
 use App\Tools\EasyAdmin\Helper\UrlHelper;
 use App\Tools\File\FileManager;
+use App\Tools\Integration\IntegrationCollection;
 use App\Tools\Integration\Ovh\Client;
 use App\Tools\Shell\Process;
 use App\Tools\String\Traits\NamespaceHelperTrait;
@@ -155,6 +157,11 @@ class DashboardController extends AbstractDashboardController
             $this->getLastNameInNamespace(Password::class),
             'fas fa-key',
             Password::class
+        );
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Anniversary::class),
+            'fas fa-calendar',
+            Anniversary::class
         );
         yield MenuItem::linkToCrud(
             $this->getLastNameInNamespace(DogJoke::class),
