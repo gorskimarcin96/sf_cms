@@ -12,6 +12,8 @@ parameters:
     ovh.application_secret: '%env(OVH_APPLICATION_SECRET)%'
     ovh.api_endpoint: '%env(OVH_API_ENDPOINT)%'
     ovh.consumer_key: '%env(OVH_CONSUMER_KEY)%'
+    dropbox.key: '%env(DROPBOX_API_KEY)%'
+    dropbox.secret: '%env(DROPBOX_API_SECRET)%'
 
 services:
     _defaults:
@@ -22,9 +24,12 @@ services:
             $projectDir: '%kernel.project_dir%'
             $seleniumUrl: '%env(SELENIUM_URL)%'
             $camasutraServices: !tagged_iterator 'app.camasutra'
+            $integrationsServices: !tagged_iterator 'app.integration'
     _instanceof:
         App\Tools\Crawler\Camasutra\CamasutraInterface:
             tags: [name: 'app.camasutra']
+        App\Tools\Integration\IntegrationInterface:
+            tags: [ name: 'app.integration' ]
 
     App\:
         resource: '../src/'
@@ -61,7 +66,8 @@ services:
         ]
 
     Spatie\Dropbox\Client:
-        autowire: true
-        arguments: [
-            '%env(DROPBOX_APIKEY)%'
-        ]
+        factory: [App\Factory\DropboxClient, create]
+
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }

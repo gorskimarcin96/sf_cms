@@ -10,13 +10,16 @@ class Constant
 {
     public const CV = 'CV';
     public const CV_DRAFT = 'CV_DRAFT';
+    public const DROPBOX_AUTHORIZATION_CODE = 'DROPBOX_AUTHORIZATION_CODE';
+    public const DROPBOX_ACCESS_TOKEN = 'DROPBOX_ACCESS_TOKEN';
+    public const DROPBOX_REFRESH_TOKEN = 'DROPBOX_REFRESH_TOKEN';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string", length: 255, unique: true)]
     private ?string $title;
 
     #[ORM\Column(type: "text")]

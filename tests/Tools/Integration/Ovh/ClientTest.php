@@ -9,15 +9,34 @@ use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
 {
-    public function testGetServices(): void
+    private Client $client;
+
+    protected function setUp(): void
     {
-        $client = $this->createMock(Client::class);
-        $client
+        $this->client = $this->createMock(Client::class);
+        $this->client
             ->method('getServices')
             ->willReturn([
                 new Service(1, 'fake', 'fake', new DateTime(), new DateTime(), new DateTime()),
             ]);
+        $this->client->method('getName')->willReturn('OVH');
+        $this->client->method('isActive')->willReturn(true);
 
-        $this->assertIsArray($client->getServices());
+        parent::setUp();
+    }
+
+    public function testGetName(): void
+    {
+        $this->assertSame('OVH', $this->client->getName());
+    }
+
+    public function testIsActive(): void
+    {
+        $this->assertTrue($this->client->isActive());
+    }
+
+    public function testGetServices(): void
+    {
+        $this->assertIsArray($this->client->getServices());
     }
 }

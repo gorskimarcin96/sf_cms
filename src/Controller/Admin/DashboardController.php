@@ -27,6 +27,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Exception;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -38,15 +39,16 @@ class DashboardController extends AbstractDashboardController
     use NamespaceHelperTrait;
 
     public function __construct(
-        private CounterStatistic   $counterStatistic,
-        private CounterChart       $counterChart,
+        private CounterStatistic $counterStatistic,
+        private CounterChart $counterChart,
         private ConstantRepository $constantRepository,
-        private PdfManager         $pdfManager,
-        private FileManager        $fileManager,
-        private RequestStack       $requestStack,
-        private UrlHelper          $url,
-        private Process            $process,
-        private Client             $client
+        private PdfManager $pdfManager,
+        private FileManager $fileManager,
+        private RequestStack $requestStack,
+        private UrlHelper $url,
+        private Process $process,
+        private Client $client,
+        private iterable $integrationsServices,
     ) {
     }
 
@@ -58,11 +60,20 @@ class DashboardController extends AbstractDashboardController
         }
 
         return $this->render('easyadmin/dashboard.html.twig', [
-            'chart'        => $this->counterChart->get(),
+            'chart' => $this->counterChart->get(),
             'statics_data' => $this->counterStatistic->get(),
-            'processes'    => $this->process->finds('php'),
-            'services'     => $this->client->getServices()
+            'processes' => $this->process->finds('php'),
+            'services' => $this->client->getServices(),
+            'integrations' => $this->integrationsServices,
         ]);
+    }
+
+    #[Route('/admin/cache-clear', name: 'easyadmin_cache_clear')]
+    public function clearCache(): Response
+    {
+        (new FilesystemAdapter())->clear();
+
+        return $this->redirectToRoute('easyadmin_dashboard');
     }
 
     #[Route('/admin/cv', name: 'easyadmin_cv', methods: 'GET')]
@@ -73,9 +84,9 @@ class DashboardController extends AbstractDashboardController
         ]);
 
         return $this->render('easyadmin/cv/index.html.twig', [
-            'CV'       => Constant::CV,
+            'CV' => Constant::CV,
             'CV_DRAFT' => Constant::CV_DRAFT,
-            'form'     => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -89,7 +100,7 @@ class DashboardController extends AbstractDashboardController
                 $data = $request->get('data');
 
                 $view = $this->renderView('easyadmin/cv/show.html.twig', ['data' => $data]);
-                $path = $this->getParameter('kernel.project_dir') . '/public/upload/' . $preview . '.pdf';
+                $path = $this->getParameter('kernel.project_dir').'/public/upload/'.$preview.'.pdf';
 
                 $this->pdfManager->createPdf($view, $path);
                 $this->constantRepository->updateConstantDescriptionByTitle($preview, $data);
@@ -108,7 +119,7 @@ class DashboardController extends AbstractDashboardController
     {
         return new JsonResponse([
             'success' => true,
-            'data'    => $this->constantRepository->findCV(),
+            'data' => $this->constantRepository->findCV(),
         ]);
     }
 
@@ -126,20 +137,75 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         //https://fontawesome.com/v5/search?m=free
-        yield MenuItem::linkToUrl('Homepage', 'fa fa-home', $this->generateUrl('homepage'));
-        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-desktop')->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToRoute('Todo', 'fas fa-clipboard-list', 'easyadmin_todolist_index');
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Password::class), 'fas fa-key', Password::class);
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(DogJoke::class), 'fas fa-table', DogJoke::class);
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Position::class), 'fas fa-table', Position::class);
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Article::class), 'fas fa-list', Article::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Offer::class), 'fas fa-newspaper', Offer::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Slider::class), 'fas fa-address-card', Slider::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Realization::class), 'fas fa-image', Realization::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(Task::class), 'fas fa-tasks', Task::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud($this->getLastNameInNamespace(MessengerMessages::class), 'fas fa-train', MessengerMessages::class)->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToUrl('Phpinfo', 'fab fa-php', $this->generateUrl('easyadmin_phpinfo'))->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToUrl('CV', 'fas fa-file', $this->generateUrl('easyadmin_cv'))->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToUrl(
+            'Homepage',
+            'fa fa-home',
+            $this->generateUrl('homepage')
+        );
+        yield MenuItem::linktoDashboard(
+            'Dashboard',
+            'fa fa-desktop'
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToRoute(
+            'Todo',
+            'fas fa-clipboard-list',
+            'easyadmin_todolist_index'
+        );
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Password::class),
+            'fas fa-key',
+            Password::class
+        );
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(DogJoke::class),
+            'fas fa-table',
+            DogJoke::class
+        );
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Position::class),
+            'fas fa-table',
+            Position::class
+        );
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Article::class),
+            'fas fa-list',
+            Article::class
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Offer::class),
+            'fas fa-newspaper',
+            Offer::class
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Slider::class),
+            'fas fa-address-card',
+            Slider::class
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Realization::class),
+            'fas fa-image',
+            Realization::class
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Task::class),
+            'fas fa-tasks',
+            Task::class
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(MessengerMessages::class),
+            'fas fa-train',
+            MessengerMessages::class
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToUrl(
+            'Phpinfo',
+            'fab fa-php',
+            $this->generateUrl('easyadmin_phpinfo')
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToUrl(
+            'CV',
+            'fas fa-file',
+            $this->generateUrl('easyadmin_cv')
+        )->setPermission('ROLE_ADMIN');
     }
 
     public function configureAssets(): Assets

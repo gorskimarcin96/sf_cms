@@ -4,6 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Constant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -36,5 +39,36 @@ class ConstantRepository extends ServiceEntityRepository
 
         $this->getEntityManager()->persist($constant);
         $this->getEntityManager()->flush();
+    }
+
+    /** @throws EntityNotFoundException */
+    public function findDropboxAuthorizationCode(): Constant
+    {
+        return $this->findOneBy(['title' => Constant::DROPBOX_AUTHORIZATION_CODE])
+            ?? throw new EntityNotFoundException();
+    }
+
+    /** @throws EntityNotFoundException */
+    public function findDropboxAccessToken(): Constant
+    {
+        return $this->findOneBy(['title' => Constant::DROPBOX_ACCESS_TOKEN]) ?? throw new EntityNotFoundException();
+    }
+
+    /** @throws EntityNotFoundException */
+    public function findDropboxRefreshToken(): Constant
+    {
+        return $this->findOneBy(['title' => Constant::DROPBOX_REFRESH_TOKEN]) ?? throw new EntityNotFoundException();
+    }
+
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function add(Constant $entity, bool $flush = true): void
+    {
+        $this->_em->persist($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
     }
 }
