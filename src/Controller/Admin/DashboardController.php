@@ -17,7 +17,6 @@ use App\Form\CVType;
 use App\Repository\ConstantRepository;
 use App\Tools\EasyAdmin\Helper\UrlHelper;
 use App\Tools\File\FileManager;
-use App\Tools\Integration\IntegrationCollection;
 use App\Tools\Integration\Ovh\Client;
 use App\Tools\Shell\Process;
 use App\Tools\String\Traits\NamespaceHelperTrait;
@@ -202,6 +201,11 @@ class DashboardController extends AbstractDashboardController
             $this->getLastNameInNamespace(MessengerMessages::class),
             'fas fa-train',
             MessengerMessages::class
+        )->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud(
+            $this->getLastNameInNamespace(Constant::class),
+            'fas fa-drafting-compass',
+            Constant::class
         )->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToUrl(
             'Phpinfo',
