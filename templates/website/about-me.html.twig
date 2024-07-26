@@ -1,0 +1,53 @@
+{% extends 'website/base.html.twig' %}
+
+{% block content %}
+    <div class="p-5">
+        <h1 class="text-center">{{ "About me"|trans }}</h1>
+        <div class="row">
+            <div class="col-lg-10 col-md-9 col-sm-12">
+                <p class="text-justify">
+                    Jestem team leaderem trzy osobowego zespołu, w którego skład wchodzi <a href="#lusia">Lusia</a> i
+                    <a href="#odi">Odi</a>. Razem tworzymy aplikacje internetowe. Wytwarzam monolity, systemy api oraz
+                    mikroserwisy. Głównie korzystam z frameworka symfony, ale również miałem okazję pracować nad
+                    laravelem. Z technologii frontendowych tworzę responsywne strony w oparciu o bibliotekę boostrap
+                    oraz tworzę interaktywne komponenty w oparciu o bilbiotekę jQuery lub framework VUE. Czasami nawet
+                    napiszę jakiś unit lub behat test.
+                </p>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-12 text-end">
+                <img src="{{ asset('build/img/meet.png') }}" alt="Odi meet" class="w-100"/>
+            </div>
+
+            <hr class="my-2">
+
+            <div class="col-lg-2 col-md-4 col-sm-12" id="lusia">
+                <img src="{{ asset('build/img/Odi.jpeg') }}" class="rounded-circle w-100" alt="Odi"/>
+            </div>
+
+            <div class="col-lg-10 col-md-8 col-sm-12" id="odi">
+                <p class="text-justify">
+                    <a href="#odi">Odi</a> zajmuje się projektowaniem baz danych oraz pisaniem skomplikowanych zapytań
+                    SQL. Miał przyjemność pracować przy relacyjnych bazach danych takich jak MySQL, MariaDB, PostgreSQL
+                    jak i przy nierelacyjnej bazie NoSQL. Robi zaawansowane wyszukiwarki na elasticsearchu oraz korzysta
+                    z silnika redis do zapisywania cache. Lubi wygrzewać się na słońcu 🌞.
+                </p>
+            </div>
+
+            <hr class="my-2">
+
+            <div class="col-lg-10 col-md-8 col-sm-12">
+                <p class="text-justify">
+                    <a href="#lusia">Lusia</a> zajmuje się devopsowaniem, stawia VPS'y, tworzy dockerfile do lokalnych
+                    środowisk oraz pisze skrypty shell na systemy linux. Jej ulubiony system to linux ubuntu mate. Jest
+                    odpowiedzialna również za system kontroli wersji. Korzysta z najpopularniejszego systemu git, tworzy
+                    pull request'y i robi code review. Zajmuje się całą architekturą aplikacji, w wolnych
+                    chwilach degustuje parówki 🍗.
+                </p>
+            </div>
+
+            <div class="col-lg-2 col-md-4 col-sm-12 text-end" id="lusia">
+                <img src="{{ asset('build/img/Lusia.jpeg') }}" class="rounded-circle w-100" alt="Lusia"/>
+            </div>
+        </div>
+    </div>
+{% endblock %}

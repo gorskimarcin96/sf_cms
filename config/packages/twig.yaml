@@ -1,0 +1,14 @@
+twig:
+    file_name_pattern: '*.twig'
+    globals:
+        locales: '%app.locales%'
+        email: '%app.email%'
+        address: '%app.address%'
+        github: '%app.github%'
+        linkedin: '%app.linkedin%'
+        googleMap: '%app.google_map%'
+        frontendManager: '@App\Twig\Navigation'
+
+when@test:
+    twig:
+        strict_variables: true

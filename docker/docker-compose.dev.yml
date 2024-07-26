@@ -22,6 +22,15 @@ services:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+  node:
+    image: node:22-slim
+    volumes:
+      - ./../:/var/www/html
+    command: sh -c "cd /var/www/html && rm -f package-lock.json && rm -rf node_modules && npm install && npx encore dev --watch"
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - ${MAILHOG_EXPOSED_PORT}:8025
 
 volumes:
   postgres:

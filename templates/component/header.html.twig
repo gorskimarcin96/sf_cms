@@ -1,0 +1,41 @@
+<div class="container my-2 text-background">
+    <div class="row col-lg-10 mx-auto">
+        <div class="col-8 d-inline-block">
+            <span class="timer">
+                <span id="dater">{{ "now"|date('d-m-Y') }}</span><span id="clock"></span>
+            </span>
+            <img src="{{ asset("/build/img/mgorski.png") }}" class="phone-logo" alt="mgorski">
+        </div>
+
+        <div class="col-4 text-right text-background align-self-center">
+            {% set localesArray = locales|split('|') %}
+            {% for locale in localesArray %}
+                <a href="{{ url('homepage',{'_locale':locale}) }}" class="">{{ locale }}</a> |
+            {% endfor %}
+            <a href="mailto:{{ email }}"><i class='fa fa-envelope mr-2 icon-con'></i></a>
+        </div>
+    </div>
+</div>
+
+<header class="my-0 col-12 main-header">
+    <div class="container">
+        <nav class="navbar navbar-expand-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand ml-1 d-md-block d-sm-none d-none" href="{{ url('homepage') }}">
+                    <img src="{{ asset("/build/img/mgorski.png") }}" class="align-top mx-auto d-md-block d-sm-none"
+                         alt="mgorski">
+                </a>
+
+                <ul class="navbar-nav me-auto w-100">
+                    {% for menu in frontendManager.menu %}
+                        <li class="nav-item mx-2">
+                            <a class="link px-1 {{ menu.active ? 'active' : '' }}" href="{{ menu.url }}">
+                                {{ menu.name|upper }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>

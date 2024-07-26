@@ -1,0 +1,80 @@
+{% extends 'website/base.html.twig' %}
+
+{% set locale = app.request.locale %}
+
+{% block content %}
+    <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for key,slider in sliders %}
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ key }}"
+                        class="{{ loop.first?'active' }}" aria-current="true" aria-label="Slide {{ key }}"></button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for key,slider in sliders %}
+                <div class="carousel-item {{ loop.first?'active' }}" data-bs-interval="{{ (key+1)*10000 }}">
+                    <img src="{{ asset(slider.fullFileFn) }}" class="d-block w-100" alt="{{ slider.translate(locale).title }}">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{ slider.translate(locale).title }}</h5>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="homepage p-5">
+        {% set i = 0 %}
+        {% for article in articles %}
+            <article class="article p-2 my-4 row {{ i%2 == 0 ? 'slide-left' : 'slide-right' }}" id="article_{{ i }}">
+                <div class="col-md-9">
+                    {{ i == 0 ? '<h1>' : '<h2>' }}{{ article.translate(locale).title }}{{ i == 0 ? '</h1>' : '</h2>' }}
+                    <div class="text-shadow mb-2">{{ article.translate(locale).description|raw }}</div>
+                </div>
+                <div class="col-md-3">
+                    <img src="{{ asset(article.fullFileFn) }}" alt="{{ article.translate(locale).title }}">
+                </div>
+            </article>
+            {% set i = i + 1 %}
+        {% endfor %}
+        <article class="article p-2 my-4 {{ i%2 == 0 ? 'slide-left' : 'slide-right' }} row" id="article_{{ i }}">
+            <div class="col-md-9">
+                <h2>{{ "Contact"|trans }}</h2>
+                <section class="text-shadow mb-2">
+                    <div><b>{{ 'Phone'|trans }}</b>: <span class="phone-number">{{ "show"|trans }}</span></div>
+                    <div><b>Email</b>: <a href="mailto:{{ email }}">{{ email }}</a></div>
+                    <div><b>{{ 'Address'|trans }}</b>: {{ address }}</div>
+                </section>
+            </div>
+            <div class="col-md-3 contact">
+                <a class="btn btn-success ml-auto w-100 d-block" href="{{ url('contact') }}">{{ "Contact"|trans }}</a>
+            </div>
+        </article>
+    </div>
+
+    <section class="py-4 px-3 background-section" id="offer">
+        <h2 class="text-center mb-4">{{ "Example realization"|trans }}</h2>
+        {% for realization in realizations %}
+            <div class="row mt-4">
+                <div class="col-md-3 col-sm-12 realization">
+                    <a href="{{ realization.url }}" target="_blank">
+                        {% if realization.fullFileFn %}
+                            <img src="{{ asset(realization.fullFileFn) }}" class="mb-2 mx-auto d-block max-width-100p"
+                                 alt="{{ realization.title }}">
+                            <span class="text-center d-block fw-bolder">{{ realization.title }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="col-md-9 col-sm-12 offer">
+                    {{ realization.translate(locale).description|raw }}
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

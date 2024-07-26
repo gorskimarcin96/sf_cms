@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+    <div class="website">
+        {{ include('component/header.html.twig') }}
+        {{ include('component/alerts.html.twig') }}
+        <main class="container p-0">
+            {% block content %}{% endblock %}
+        </main>
+        {{ include('component/footer.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>const route_phone_number = "{{ path('phone_number')|escape('js') }}";</script>
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}

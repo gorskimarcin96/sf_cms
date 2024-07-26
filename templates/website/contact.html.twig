@@ -1,0 +1,18 @@
+{% extends 'website/base.html.twig' %}
+
+{% block content %}
+    <div class="homepage p-5">
+        <h1 class="text-center">{{ "Contact"|trans }}</h1>
+        <article class="article container py-2">
+            <h2 class="mb-3">{{ "Contact"|trans }}</h2>
+            <i class='fa fa-phone mr-2 icon-con'></i> <span class="ml-2 phone-number">{{ "show"|trans }}</span><br>
+            <i class='fa fa-envelope mr-2 icon-con'></i> <span class="ml-2"><a href="mailto:{{ email }}">{{ email }}</a></span>
+            <h2 class="mt-5">{{ "Contact form"|trans }}</h2>
+            {{ form(form) }}
+        </article>
+    </div>
+
+    <section>
+        <iframe class="map" src="{{ googleMap }}"></iframe>
+    </section>
+{% endblock %}
