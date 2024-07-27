@@ -4,14 +4,12 @@ VALUES (1, 1, '<b>Funkcjonalności:</b>
 <li>Prosty system CMS do zarządzenia treścią i stroną www.</li>
 <li>Funkcjonalność śledzenia ruchu na stronie.</li>
 <li>Funkcjonalność formularza kontaktowego.</li>
-<li>Prywatny system newsletter.</li>
 <ul>', 'pl'),
        (2, 1, '<b>Features:</b>
 <ul>
 <li>Simple CMS system for content and website management.</li>
 <li>Website traffic tracking functionality.</li>
 <li>Contact form functionality.</li>
-<li>Private newsletter system.</li>
 <ul>', 'en'),
        (3, 2, '<b>Funkcjonalności:</b>
 <ul>

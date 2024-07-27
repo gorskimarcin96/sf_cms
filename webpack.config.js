@@ -20,6 +20,7 @@ Encore
         includeSubdirectories: true,
     })
     .addEntry('app', './assets/app.js')
+    .addEntry('homepage', './assets/homepage.js')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()

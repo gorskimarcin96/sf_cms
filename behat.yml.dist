@@ -1,0 +1,8 @@
+default:
+    suites:
+        default:
+            contexts:
+                - App\Tests\Behat\WebsiteContext
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: 'tests/bootstrap.php'
