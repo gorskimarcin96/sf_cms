@@ -66,6 +66,15 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "database-test": [
+            "php ./bin/console doctrine:database:create --if-not-exists --env=test -q",
+            "php ./bin/console doctrine:schema:drop --full-database --force --env=test -q",
+            "php -d memory_limit=-1 ./bin/console doctrine:migrations:migrate -n --env=test -q"
+        ],
+        "behat": [
+            "@database-test",
+            "php -d memory_limit=-1 ./vendor/bin/behat -f progress"
         ]
     },
     "conflict": {
@@ -81,6 +90,8 @@
         "behat/behat": "^3.14",
         "friends-of-behat/symfony-extension": "^2.6",
         "phpunit/phpunit": "^11.2",
+        "symfony/css-selector": "7.1.*",
+        "symfony/dom-crawler": "7.1.*",
         "symfony/maker-bundle": "^1.60",
         "symfony/stopwatch": "7.1.*",
         "symfony/web-profiler-bundle": "7.1.*"
