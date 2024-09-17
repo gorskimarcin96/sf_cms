@@ -1,7 +1,12 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+    bind:
+      $appEmail: '%env(APP_EMAIL)%'
 
-    App\Tests\Behat\:
-        resource: '../tests/Behat/*'
+  App\Tests\Behat\:
+    resource: '../tests/Behat/*'
+  App\Factory\ContactMailer:
+    public: true

@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Utils\Counter\CounterManager;
+use App\Utils\Counter\Logger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -15,14 +15,16 @@ readonly class RouteEventSubscriber implements EventSubscriberInterface
         '/pl/o-mnie',
         '/pl/curriculum-vitae',
         '/pl/file/CV_PL.pdf',
+        '/pl/login',
         '/en/',
         '/en/contact',
         '/en/about-me',
         '/en/curriculum-vitae',
         '/en/file/CV_EN.pdf',
+        '/en/login',
     ];
 
-    public function __construct(private CounterManager $counterManager)
+    public function __construct(private Logger $counterLogger)
     {
     }
 
@@ -36,7 +38,7 @@ readonly class RouteEventSubscriber implements EventSubscriberInterface
         $requestUri = $event->getRequest()->getRequestUri();
 
         if (in_array($requestUri, static::LISTEN_ROUTERS_FOR_LOG)) {
-            $this->counterManager->entry($requestUri);
+            $this->counterLogger->entry($requestUri);
         }
     }
 

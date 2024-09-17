@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Behat;
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -89,10 +90,27 @@ final readonly class WebsiteContext implements Context
     }
 
     /**
+     * @Given I send login form with data clicking by :buttonName
+     */
+    public function iSendLoginFormWithData(string $buttonName, TableNode $data): void
+    {
+        $this->client->submitForm($buttonName, $data->getHash()[0]);
+    }
+
+    /**
      * @Given the response should contain :title
      */
     public function theResponseShouldContain(string $title): void
     {
         Assert::assertStringContainsString($title, $this->client->getResponse()->getContent());
+    }
+
+
+    /**
+     * @Given I should see :number rows
+     */
+    public function iShouldSeeRows(int $number): void
+    {
+        Assert::assertSame($number, $this->client->getCrawler()->filter("table>tbody>tr")->count());
     }
 }

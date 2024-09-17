@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace App\Tests\Behat;
 
 use App\Entity\Counter;
+use App\Entity\User;
 use App\Repository\CounterRepository;
+use App\Repository\UserRepository;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Assert;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final readonly class DatabaseContext implements Context
 {
     public function __construct(
         private CounterRepository $counterRepository,
+        private UserPasswordHasherInterface $passwordHasher,
+        private UserRepository $userRepository,
         private EntityManagerInterface $entityManager
     ) {
     }
@@ -22,7 +27,7 @@ final readonly class DatabaseContext implements Context
     /**
      * @Given the counter is clean
      */
-    public function theDatabaseIsClean(): void
+    public function theCounterIsClean(): void
     {
         $this->counterRepository->truncate();
     }
@@ -65,5 +70,17 @@ final readonly class DatabaseContext implements Context
         $this->entityManager->clear();
 
         Assert::assertSame(0, $this->counterRepository->count(['url' => $url]));
+    }
+
+    /**
+     * @Given update email :email and password :password for main user
+     */
+    public function updateEmailAndPasswordForMainUser(string $email, string $password): void
+    {
+        $user = $this->userRepository->findOneBy([]);
+        $user->setEmail($email)->setPassword($this->passwordHasher->hashPassword($user, $password));
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 }

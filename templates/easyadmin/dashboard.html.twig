@@ -1,0 +1,51 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block content_title %}Dashboard{% endblock %}
+
+{% block main %}
+    <div id="main">
+        <div class="row">
+        {% for row in rows %}
+                <div class="col-12 col-md-3">
+                    <div class="card m-2">
+                        <div class="card-header fw-bold">Stats</div>
+                        <div class="card-body p-0 table-responsive rounded">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead>
+                                <tr>
+                                    <th>Last days</th>
+                                    <th>Entries</th>
+                                    <th>Refreshes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for data in row.stats %}
+                                    <tr>
+                                        <td>{{ data.days }}</td>
+                                        <td>{{ data.entries }}</td>
+                                        <td>{{ data.refresh }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="alert alert-danger rounded">Not found.</div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-9">
+                    <div class="card m-2">
+                        <div class="card-header fw-bold">Chart</div>
+                        <div class="card-body">{{ render_chart(row.chart) }}</div>
+                    </div>
+                </div>
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

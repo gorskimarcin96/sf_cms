@@ -26,7 +26,7 @@ services:
     image: node:22-slim
     volumes:
       - ./../:/var/www/html
-    command: sh -c "cd /var/www/html && rm -f package-lock.json && rm -rf node_modules && npm install && npx encore dev --watch"
+    command: sh -c "cd /var/www/html && rm -f package-lock.json && rm -rf node_modules && npm install --force && npx encore dev --watch"
   mailhog:
     image: mailhog/mailhog:v1.0.1
     ports:

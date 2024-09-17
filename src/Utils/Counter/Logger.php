@@ -6,7 +6,7 @@ use App\Entity\Counter;
 use App\Repository\CounterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-readonly class CounterManager
+readonly class Logger
 {
     public function __construct(private EntityManagerInterface $em, private CounterRepository $counterRepository)
     {

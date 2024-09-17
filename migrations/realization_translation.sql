@@ -2,15 +2,15 @@ INSERT INTO realization_translation (id, translatable_id, description, locale)
 VALUES (1, 1, '<b>Funkcjonalności:</b>
 <ul>
 <li>Prosty system CMS do zarządzenia treścią i stroną www.</li>
-<li>Funkcjonalność śledzenia ruchu na stronie.</li>
+<li>Funkcjonalność śledzenia ruchu na stronie.</li>
 <li>Funkcjonalność formularza kontaktowego.</li>
-<ul>', 'pl'),
+</ul>', 'pl'),
        (2, 1, '<b>Features:</b>
 <ul>
 <li>Simple CMS system for content and website management.</li>
 <li>Website traffic tracking functionality.</li>
 <li>Contact form functionality.</li>
-<ul>', 'en'),
+</ul>', 'en'),
        (3, 2, '<b>Funkcjonalności:</b>
 <ul>
         <li>Stworzenie nowej aplikacji w oparciu o legacy code.</li>

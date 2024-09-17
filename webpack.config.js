@@ -21,6 +21,8 @@ Encore
     })
     .addEntry('app', './assets/app.js')
     .addEntry('homepage', './assets/homepage.js')
+    .addEntry('easyadmin', './assets/easyadmin.js')
+    .enableStimulusBridge('./assets/controllers.json')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()

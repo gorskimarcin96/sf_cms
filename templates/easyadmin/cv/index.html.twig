@@ -1,0 +1,45 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block main %}
+    <div class="position-absolute">
+        <div class="px-2">
+            <div class="row bg-dark">
+                <div class="col-6 p-0 cv-form">
+                    <div class="text-right mt-2">
+                        <h1 class="d-inline float-start small">CV maker</h1>
+                        <a class="btn btn-secondary" href="{{ url('admin_dashboard') }}">Wróć</a>
+                        <button class="btn btn-success cv-save" data-url="{{ previewCVUrl }}">Zapisz</button>
+                        <button class="btn btn-warning cv-revert" data-url="{{ revertUrl }}">Przywróć</button>
+                        <button class="btn btn-primary cv-save" data-url="{{ previewCVDraftUrl }}">Podgląd</button>
+                    </div>
+                    {{ form_start(form) }}
+                    {{ form_widget(form.cv) }}
+                    {{ form_end(form) }}
+                </div>
+                <div class="col-6 p-0">
+                    <embed src="{{ asset(assetPath) }}" type="application/pdf" width="100%" height="100%" id="cv"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        .position-absolute {
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 3000;
+            overflow: hidden;
+        }
+
+        .cv-form {
+            height: 100vh;
+            overflow: auto;
+        }
+    </style>
+{% endblock %}

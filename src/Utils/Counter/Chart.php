@@ -3,11 +3,11 @@
 namespace App\Utils\Counter;
 
 use App\Repository\CounterRepository;
-use App\Tools\Date\DateTimeManager;
+use App\Utils\DateTimeManager;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
-use Symfony\UX\Chartjs\Model\Chart;
+use Symfony\UX\Chartjs\Model\Chart as SymfonyChart;
 
-class CounterChart
+readonly class Chart
 {
     public function __construct(
         private ChartBuilderInterface $chartBuilder,
@@ -16,16 +16,16 @@ class CounterChart
     ) {
     }
 
-    public function get(): Chart
+    public function get(): SymfonyChart
     {
         $days = 30;
         $labels = $this->dateTimeManager->getArrayDates(
-            (new \DateTime())->modify(sprintf('-%s days', --$days)),
-            (new \DateTime())->modify('+1 days'),
+            new \DateTime(sprintf('-%s days', $days)),
+            new \DateTime('+1 days'),
             new \DateInterval('P1D')
         );
 
-        return $this->chartBuilder->createChart(Chart::TYPE_LINE)->setData([
+        return $this->chartBuilder->createChart(SymfonyChart::TYPE_LINE)->setData([
             'labels' => $labels,
             'datasets' => [
                 [
@@ -58,22 +58,14 @@ class CounterChart
      */
     private function prepareDataToChart(array $data, array $labels): array
     {
-        $newData = [];
+        $newData = array_fill_keys($labels, 0);
 
         foreach ($data as $datum) {
             $newData[$datum['date']->format('Y-m-d')] = $datum['value'];
         }
 
-        foreach ($labels as $label) {
-            if (!isset($newData[$label])) {
-                $newData[$label] = 0;
-            }
-        }
-
         ksort($newData);
-        /** @var int[] $newData */
-        $newData = array_values($newData);
 
-        return $newData;
+        return array_values($newData);
     }
 }

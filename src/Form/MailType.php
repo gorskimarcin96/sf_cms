@@ -11,14 +11,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class MailType extends AbstractType
 {
+    public const ATTR_CLASS = 'form-control mb-4 border border-light bg-dark text-light';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $class = 'form-control mb-4 border border-light bg-dark text-light';
-
         $builder
-            ->add('email', EmailType::class, ['label' => 'E-mail', 'attr' => ['class' => $class]])
-            ->add('message', TextareaType::class, ['label' => 'Message', 'attr' => ['class' => $class]])
-            ->add('number', NumberType::class, ['label' => 'What is the result for 2 + 3?', 'attr' => ['class' => $class]])
+            ->add('email', EmailType::class, ['label' => 'E-mail', 'attr' => ['class' => static::ATTR_CLASS]])
+            ->add('message', TextareaType::class, ['label' => 'Message', 'attr' => ['class' => static::ATTR_CLASS]])
+            ->add('number', NumberType::class, ['label' => 'What is the result for 2 + 3?', 'attr' => ['class' => static::ATTR_CLASS]])
             ->add('submit', SubmitType::class, ['label' => 'Send', 'attr' => ['class' => 'btn btn-success ml-auto d-block']]);
     }
 }
