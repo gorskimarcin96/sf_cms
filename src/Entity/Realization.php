@@ -8,7 +8,6 @@ use App\Entity\Traits\FileUploadTrait;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeStampableTrait;
 use App\Entity\Traits\TranslatableTrait;
-use App\Enum\LocaleEnum;
 use App\Repository\RealizationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

@@ -12,6 +12,7 @@ services:
     autowire: true
     autoconfigure: true
     bind:
+      $projectDir: '%kernel.project_dir%'
       $appPhoneNumber: '%env(APP_PHONE_NUMBER)%'
       $appEmail: '%env(APP_EMAIL)%'
   App\:

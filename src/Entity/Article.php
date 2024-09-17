@@ -51,7 +51,7 @@ class Article implements TranslatableInterface
     public function translate(string $locale): TranslationInterface|ArticleTranslation
     {
         return $this->translations
-            ->filter(fn(TranslationInterface $translation): bool => $translation->getLocale() === $locale)
+            ->filter(fn (TranslationInterface $translation): bool => $translation->getLocale() === $locale)
             ->first() ?: throw new \LogicException('Translation not exists.');
     }
 }

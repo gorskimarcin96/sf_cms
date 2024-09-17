@@ -9,11 +9,12 @@ use App\Repository\ArticleRepository;
 use App\Repository\RealizationRepository;
 use App\Repository\SliderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Asset\Exception\AssetNotFoundException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -47,7 +48,7 @@ class WebsiteController extends AbstractController
             try {
                 $data = $form->getData();
 
-                if (5 === (int)$data['number']) {
+                if (5 === (int) $data['number']) {
                     $mailer->send($contactMailer->build($data['email'], $data['message']));
 
                     $this->addFlash('success', $translator->trans('The form has been sent.'));
@@ -77,5 +78,15 @@ class WebsiteController extends AbstractController
         return $this->render('website/curriculum-vitae.html.twig', [
             'CVPath' => sprintf('upload/CV_%s.pdf', strtoupper($request->getLocale())),
         ]);
+    }
+
+    #[Route('file/{fileName}', name: 'file')]
+    public function getFile(string $fileName, string $projectDir): BinaryFileResponse
+    {
+        $path = $projectDir.'/public/upload/'.$fileName;
+
+        return file_exists($path)
+            ? new BinaryFileResponse($path)
+            : throw new AssetNotFoundException('File '.$fileName.' is not exists.');
     }
 }

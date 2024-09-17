@@ -4,8 +4,8 @@ namespace App\Entity\Interface;
 
 interface TranslationInterface
 {
-    const POLISH = 'pl';
-    const ENGLISH = 'en';
+    public const POLISH = 'pl';
+    public const ENGLISH = 'en';
 
     public function __construct(?int $id = null, string $locale = self::ENGLISH);
 
@@ -15,5 +15,5 @@ interface TranslationInterface
 
     public function getTranslatable(): TranslatableInterface;
 
-    public function setTranslatable(TranslatableInterface $translatable): static;
+    public function setTranslatable(?TranslatableInterface $translatable): static;
 }

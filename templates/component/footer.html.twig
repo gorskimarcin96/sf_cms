@@ -17,7 +17,9 @@
                         {% endfor %}
                         <a target="_blank" href="{{ github }}">github</a> -
                         <a target="_blank"
-                           href="{{ asset(app.request.locale == "pl" ? "upload/CV_PL.pdf" : "upload/CV_EN.pdf") }}">CV</a>
+                           href="{{ url('file', {fileName: app.request.locale == "pl" ? "CV_PL.pdf" : "CV_EN.pdf"}) }}">
+                            CV
+                        </a>
                     </section>
                 </div>
                 <div class="col-sm-4 icons d-flex justify-content-end">
