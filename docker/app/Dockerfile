@@ -4,15 +4,12 @@ ARG PHP_VERSION=8.3
 #php
 FROM php:${PHP_VERSION}-apache
 
-COPY . /var/www/html/
-
 #default
 RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
       git \
       unzip \
       libzip-dev \
       libpq-dev \
-      librabbitmq-dev \
       libssl-dev \
       git \
       unzip \
@@ -23,6 +20,11 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
       pdo \
       pdo_pgsql \
       zip
+
+#imagic
+RUN apt-get install -y libmagickwand-dev; \
+    pecl install imagick; \
+    docker-php-ext-enable imagick;
 
 #intl
 RUN apt-get -y update \
