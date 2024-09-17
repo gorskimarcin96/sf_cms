@@ -21,11 +21,6 @@ RUN apt-get -y update && apt-get upgrade -y && apt-get install -y \
       pdo_pgsql \
       zip
 
-#imagic
-RUN apt-get install -y libmagickwand-dev; \
-    pecl install imagick; \
-    docker-php-ext-enable imagick;
-
 #intl
 RUN apt-get -y update \
     && apt-get install -y libicu-dev \

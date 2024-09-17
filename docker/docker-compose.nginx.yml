@@ -23,8 +23,6 @@ services:
       - letsencrypt:/etc/letsencrypt
     depends_on:
       - db
-    networks:
-      - nginx
     restart: unless-stopped
   db:
     image: 'jc21/mariadb-aria:latest'
@@ -37,12 +35,13 @@ services:
       MARIADB_AUTO_UPGRADE: '1'
     volumes:
       - mariadb:/var/lib/mysql
-    networks:
-      - nginx
     restart: unless-stopped
 
 networks:
-  nginx:
+  sf_cms:
+    external: true
+    driver: bridge
+  sf_app:
     external: true
     driver: bridge
 

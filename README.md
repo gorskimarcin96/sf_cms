@@ -1,36 +1,24 @@
-# Run project
+# Run docker for dev
 
-## Copy .env file
 ```sh
+cp .env.example .env
 cp docker/.env.dist docker/.env
+docker compose -f docker/docker-compose.dev.yml build sf_cms
+docker compose -f docker/docker-compose.dev.yml up -d
+docker compose -f docker/docker-compose.dev.yml exec sf_cms composer install
 ```
 
-## Create network and run nginx proxy manager
+## Run tests
 ```sh
-docker network create nginx
-docker-compose -f docker/docker-compose.nginx.yml up -d
+docker compose -f docker/docker-compose.dev.yml exec sf_cms composer tests
 ```
 
-## Run dev
-```sh
-docker-compose -f docker/docker-compose.dev.yml up -d
-docker-compose -f docker/docker-compose.dev.yml exec app composer install
-```
+# Run docker for prod
 
-## Run prod
 ```sh
-docker-compose -f docker/docker-compose.prod.yml up -d
-docker-compose -f docker/docker-compose.prod.yml exec app composer install --no-dev
-```
-
-### Run tests
-```sh
-docker-compose -f docker/docker-compose.dev.yml exec app composer tests
-```
-
-### Stop all dockers
-```sh
-docker-compose -f docker/docker-compose.nginx.yml
-docker-compose -f docker/docker-compose.dev.yml
-docker-compose -f docker/docker-compose.prod.yml
+cp .env.example .env
+cp docker/.env.dist docker/.env
+docker compose -f docker/docker-compose.prod.yml build sf_cms
+docker compose -f docker/docker-compose.prod.yml up -d
+docker compose -f docker/docker-compose.prod.yml exec sf_cms composer install --no-dev
 ```

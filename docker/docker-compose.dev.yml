@@ -1,8 +1,9 @@
 version: "3.7"
 
 services:
-  app:
-    image: sf_mgorski.dev
+  sf_cms:
+    container_name: sf_cms_dev
+    image: sf_cms
     build:
       context: ./..
       dockerfile: ./docker/app/Dockerfile
@@ -12,39 +13,29 @@ services:
       - ./../:/var/www/html
       - ./app/config/vhosts:/etc/apache2/sites-enabled
       - ./app/config/dir/dir.conf:/etc/apache2/mods-enabled/dir.conf
-    networks:
-      - nginx
-  database:
+  sf_cms_database_dev:
+    container_name: sf_cms_database_dev
     image: postgres:15.1
     ports:
       - ${DATABASE_EXPOSED_PORT}:5432
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres_sf_cms:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-    networks:
-      - nginx
-  node:
+  sf_cms_node:
+    container_name: sf_cms_node_dev
     image: node:22-slim
     volumes:
       - ./../:/var/www/html
     command: sh -c "cd /var/www/html && rm -f package-lock.json && rm -rf node_modules && npm install --force && npx encore dev --watch"
-    networks:
-      - nginx
-  mailhog:
+  sf_cms_mailhog:
+    container_name: sf_cms_mailhog_dev
     image: mailhog/mailhog:v1.0.1
     ports:
       - ${MAILHOG_EXPOSED_PORT}:8025
-    networks:
-      - nginx
-
-networks:
-  nginx:
-    external: true
-    driver: bridge
 
 volumes:
-  postgres:
+  postgres_sf_cms:
     driver: local

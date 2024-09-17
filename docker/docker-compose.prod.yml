@@ -1,43 +1,47 @@
 version: "3.7"
 
 services:
-  app:
-    image: sf_mgorski.dev
+  sf_cms_app:
+    container_name: sf_cms_app
+    image: sf_cms
     build:
       context: ./..
+      dockerfile: ./docker/app/Dockerfile
     ports:
-      - ${APP_EXPOSED_PORT}:82
+      - ${CMS_APP_EXPOSED_PORT}:82
     volumes:
       - ./../:/var/www/html
       - ./app/config/vhosts:/etc/apache2/sites-enabled
       - ./app/config/dir/dir.conf:/etc/apache2/mods-enabled/dir.conf
     networks:
-      - nginx
-  database:
+      - sf_cms
+  sf_cms_database:
+    container_name: sf_cms_database
     image: postgres:15.1
     ports:
-      - ${DATABASE_EXPOSED_PORT}:5432
+      - ${CMS_DATABASE_EXPOSED_PORT}:5432
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres_sf_cms:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${CMS_DATABASE_NAME}
+      POSTGRES_USER: ${CMS_DATABASE_USER}
+      POSTGRES_PASSWORD: ${CMS_DATABASE_PASSWORD}
     networks:
-      - nginx
-  node:
+      - sf_cms
+  sf_cms_node:
+    container_name: sf_cms_node
     image: node:22-slim
     volumes:
       - ./../:/var/www/html
     command: sh -c "cd /var/www/html && rm -f package-lock.json && rm -rf node_modules && npm install --force && npx encore dev"
     networks:
-      - nginx
+      - sf_cms
 
 networks:
-  nginx:
+  sf_cms:
     external: true
     driver: bridge
 
 volumes:
-  postgres:
+  postgres_sf_cms:
     driver: local
