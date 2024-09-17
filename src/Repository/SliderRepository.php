@@ -13,7 +13,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method Slider|null find($id, $lockMode = null, $lockVersion = null)
  * @method Slider|null findOneBy(array $criteria, array $orderBy = null)
- * @method Slider[]    findAll()
  * @method Slider[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class SliderRepository extends ServiceEntityRepository
@@ -21,5 +20,11 @@ class SliderRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Slider::class);
+    }
+
+    /** @return Slider[] */
+    public function findAll(): array
+    {
+        return $this->findBy([], ['createdAt' => 'asc']);
     }
 }

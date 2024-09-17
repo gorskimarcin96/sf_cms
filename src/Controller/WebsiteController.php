@@ -32,7 +32,7 @@ class WebsiteController extends AbstractController
         return $this->render('website/homepage.html.twig', [
             'sliders' => $sliderRepository->findAll(),
             'articles' => $articleRepository->findAll(),
-            'realizations' => $realizationRepository->findBy([], ['createdAt' => 'asc']),
+            'realizations' => $realizationRepository->findAll(),
         ]);
     }
 
