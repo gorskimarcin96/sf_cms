@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Utils\Counter;
 
 use App\Repository\CounterRepository;
@@ -12,7 +14,7 @@ readonly class Chart
     public function __construct(
         private ChartBuilderInterface $chartBuilder,
         private CounterRepository $counterRepository,
-        private DateTimeManager $dateTimeManager
+        private DateTimeManager $dateTimeManager,
     ) {
     }
 

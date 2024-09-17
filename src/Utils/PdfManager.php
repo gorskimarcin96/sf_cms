@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Utils;
 
 use Knp\Snappy\Pdf;
@@ -8,6 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class PdfManager
 {
     private Pdf $pdf;
+
     private Filesystem $fileSystem;
 
     public function __construct()

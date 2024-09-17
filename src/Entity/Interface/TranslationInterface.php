@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Interface;
 
 interface TranslationInterface
 {
     public const POLISH = 'pl';
+
     public const ENGLISH = 'en';
 
     public function __construct(?int $id = null, string $locale = self::ENGLISH);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\Article;
@@ -47,7 +49,7 @@ class DashboardController extends AbstractDashboardController
         [$cv, $cvDraft, $assetPath] = match ($_locale) {
             TranslationInterface::POLISH => [CVEnum::CV_PL, CVEnum::CV_PL_DRAFT, 'upload/CV_PL_DRAFT.pdf'],
             TranslationInterface::ENGLISH => [CVEnum::CV_EN, CVEnum::CV_EN_DRAFT, 'upload/CV_EN_DRAFT.pdf'],
-            default => throw new \LogicException('Locale is not valid.')
+            default => throw new \LogicException('Locale is not valid.'),
         };
         $form = $this->createForm(CVType::class, null, [
             'cv' => $this->CVRepository->findByEnum($cv)->getDescription(),

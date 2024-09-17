@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Interface\TranslationInterface as Locale;
@@ -25,7 +27,7 @@ class WebsiteController extends AbstractController
     public function index(
         SliderRepository $sliderRepository,
         ArticleRepository $articleRepository,
-        RealizationRepository $realizationRepository
+        RealizationRepository $realizationRepository,
     ): Response {
         return $this->render('website/homepage.html.twig', [
             'sliders' => $sliderRepository->findAll(),

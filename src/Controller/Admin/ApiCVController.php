@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Admin;
 
 use App\Enum\CVEnum;
@@ -32,8 +34,8 @@ class ApiCVController extends AbstractController
             $CVRepository->updateConstantDescriptionByEnum($data, CVEnum::from($preview));
 
             return new JsonResponse([], Response::HTTP_OK);
-        } catch (\Throwable $exception) {
-            $logger->error($exception::class.' '.$exception->getMessage());
+        } catch (\Throwable $throwable) {
+            $logger->error($throwable::class.' '.$throwable->getMessage());
 
             return new JsonResponse([], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
