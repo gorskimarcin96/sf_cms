@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   app:
-    image: sf_cms
+    image: sf_mgorski.dev
     build:
       context: ./..
       dockerfile: ./docker/app/Dockerfile
