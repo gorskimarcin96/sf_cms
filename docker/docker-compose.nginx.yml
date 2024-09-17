@@ -1,0 +1,55 @@
+version: "3.7"
+
+#Email:    admin@example.com
+#Password: changeme
+
+services:
+  nginx-proxy:
+    image: 'jc21/nginx-proxy-manager:2.10.4'
+    container_name: nginx-proxy
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    environment:
+      # Mysql/Maria connection parameters:
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: ${DATABASE_NPM_USER}
+      DB_MYSQL_PASSWORD: ${DATABASE_NPM_PASSWORD}
+      DB_MYSQL_NAME: "npm"
+    volumes:
+      - data:/data
+      - letsencrypt:/etc/letsencrypt
+    depends_on:
+      - db
+    networks:
+      - nginx
+    restart: unless-stopped
+  db:
+    image: 'jc21/mariadb-aria:latest'
+    container_name: nginx-proxy-database
+    environment:
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: ${DATABASE_NPM_USER}
+      MYSQL_PASSWORD: ${DATABASE_NPM_PASSWORD}
+      MARIADB_AUTO_UPGRADE: '1'
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - nginx
+    restart: unless-stopped
+
+networks:
+  nginx:
+    external: true
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
+  letsencrypt:
+    driver: local
+  mariadb:
+    driver: local
